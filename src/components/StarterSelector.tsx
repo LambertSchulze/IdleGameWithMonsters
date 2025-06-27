@@ -1,11 +1,11 @@
-import { PokemonProfile } from './PokemonProfile'
+import { MonProfile } from './MonProfile'
 
 export const StarterSelector = ({ starters }: { starters: number[] }) => {
   return (
     <dialog open>
-      Select your Starter:
+      Select your Starter Mon:
       {starters.map(id => (
-        <PokemonProfile key={id} id={id} />
+        <MonProfile key={id} id={id} />
       ))}
     </dialog>
   )

@@ -1,12 +1,16 @@
 import { Provider } from 'react-redux'
 import { store } from './services/store'
-import { StarterSelector } from './components/StarterSelector'
+// import { StarterSelector } from './components/StarterSelector'
+import { BattleScene } from './components/BattleScene/BattleScene'
+import { BattleProvider } from './game/BattleContextProvider'
 
 function App() {
   return (
     <Provider store={store}>
-      <h1>Idle Game with Monsters</h1>
-      <StarterSelector starters={[1, 4, 7]} />
+      {/* <StarterSelector starters={[1, 4, 7]} /> */}
+      <BattleProvider enemy={16}>
+        <BattleScene />
+      </BattleProvider>
     </Provider>
   )
 }
