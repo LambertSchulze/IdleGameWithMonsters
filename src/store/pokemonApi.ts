@@ -17,6 +17,12 @@ interface PokemonDetailApi {
         name: 'attack'
       }
     }
+    2: {
+      base_stat: number
+      stat: {
+        name: 'defense'
+      }
+    }
   }
   sprites: {
     front_default: string
@@ -29,6 +35,7 @@ interface MonDetailData {
   name: string
   hp: number
   attack: number
+  defense: number
   spriteFront: string
   spriteBack: string
 }
@@ -43,9 +50,10 @@ export const pokemonApi = createApi({
       query: id => `pokemon/${id}/`,
       transformResponse: (result: PokemonDetailApi) => ({
         id: result.id,
-        name: result.name,
+        name: result.name[0].toUpperCase() + result.name.slice(1),
         hp: result.stats[0].base_stat,
         attack: result.stats[1].base_stat,
+        defense: result.stats[2].base_stat,
         spriteFront: result.sprites.front_default,
         spriteBack: result.sprites.back_default
       })

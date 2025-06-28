@@ -1,16 +1,17 @@
-import { useState, useEffect, useCallback } from 'react'
-import type { FC, PropsWithChildren } from 'react'
+import { useState, useEffect, useCallback, type FC, type PropsWithChildren } from 'react'
 import { BattleContext } from './BattleContext'
-import { useMonDetailQuery } from '../services/pokemonApi'
+import { useMonDetailQuery } from '../store/pokemonApi'
+import { useAppSelector } from '../store/store'
 
 interface Props {
   enemy: number
 }
 
 export const BattleProvider: FC<PropsWithChildren<Props>> = ({ children, enemy }) => {
-  const { data: teamData, isSuccess: teamDataReady } = useMonDetailQuery(1)
+  const runState = useAppSelector(state => state.runState)
+  const { data: teamData, isSuccess: teamDataReady } = useMonDetailQuery(runState.team[0])
   const { data: enemyData, isSuccess: enemyDataReady } = useMonDetailQuery(enemy)
-  const [enemyHealth, setEnemyHealth] = useState(33)
+  const [enemyHealth, setEnemyHealth] = useState(1)
   const initEnemyHealth = useCallback((enemyHp: number) => {
     setEnemyHealth(enemyHp)
   }, [])
@@ -27,7 +28,13 @@ export const BattleProvider: FC<PropsWithChildren<Props>> = ({ children, enemy }
     team: {
       name: teamData.name,
       spriteBack: teamData.spriteBack,
-      attack: () => setEnemyHealth(health => Math.max(health - 5, 0))
+      attack: () =>
+        setEnemyHealth(health =>
+          Math.max(
+            health - Math.round(((2 / 5 + 2) * (teamData.attack / enemyData.defense)) / 50 + 2),
+            0
+          )
+        )
     },
     enemy: {
       name: enemyData.name,
