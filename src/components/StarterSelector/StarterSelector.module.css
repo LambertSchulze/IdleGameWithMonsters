@@ -1,0 +1,17 @@
+.heading {
+  text-align: center;
+}
+
+.startersContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.profileImage {
+  display: block;
+}
+
+.profileButton {
+  width: 100%;
+}

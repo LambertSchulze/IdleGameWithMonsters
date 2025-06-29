@@ -1,26 +1,25 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 export interface RunState {
   starterMons: number[]
-  team: number[]
-  enemies: number[]
+  encounters: number[]
+  event: 'STARTER' | 'BATTLE'
 }
 
 const initialState: RunState = {
   starterMons: [1, 4, 7],
-  team: [],
-  enemies: [16, 19]
+  encounters: [16, 19],
+  event: 'STARTER'
 }
 
 export const runSlice = createSlice({
   name: 'runState',
   initialState,
   reducers: {
-    addToTeam(state, action: PayloadAction<number>) {
-      const id = action.payload
-      state.team.push(id)
+    setEventToBattle(state) {
+      state.event = 'BATTLE'
     }
   }
 })
 
-export const { addToTeam: addToTeam } = runSlice.actions
+export const { setEventToBattle } = runSlice.actions

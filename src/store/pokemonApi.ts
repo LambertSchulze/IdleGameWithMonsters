@@ -3,7 +3,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 interface PokemonDetailApi {
   id: number
   name: string
-  attack: number
+  sprites: {
+    front_default: string
+    back_default: string
+  }
   stats: {
     0: {
       base_stat: number
@@ -23,19 +26,36 @@ interface PokemonDetailApi {
         name: 'defense'
       }
     }
-  }
-  sprites: {
-    front_default: string
-    back_default: string
+    3: {
+      base_stat: number
+      stat: {
+        name: 'special-attack'
+      }
+    }
+    4: {
+      base_stat: number
+      stat: {
+        name: 'special-defense'
+      }
+    }
+    5: {
+      base_stat: number
+      stat: {
+        name: 'speed'
+      }
+    }
   }
 }
 
-interface MonDetailData {
+export interface MonDetailData {
   id: number
   name: string
   hp: number
   attack: number
   defense: number
+  specialAttack: number
+  specialDefense: number
+  speed: number
   spriteFront: string
   spriteBack: string
 }
@@ -54,6 +74,9 @@ export const pokemonApi = createApi({
         hp: result.stats[0].base_stat,
         attack: result.stats[1].base_stat,
         defense: result.stats[2].base_stat,
+        specialAttack: result.stats[3].base_stat,
+        specialDefense: result.stats[4].base_stat,
+        speed: result.stats[5].base_stat,
         spriteFront: result.sprites.front_default,
         spriteBack: result.sprites.back_default
       })

@@ -1,16 +1,10 @@
-import { BattleScene } from '../components/BattleScene/BattleScene'
-import { BattleProvider } from './BattleContextProvider'
 import { useAppSelector } from '../store/store'
-import { StarterSelector } from '../components/StarterSelector'
+import { StarterSelector } from '../components/StarterSelector/StarterSelector'
+import { Battle } from './Battle/Battle'
 
 export const Game = () => {
-  const runState = useAppSelector(state => state.runState)
+  const event = useAppSelector(state => state.runState.event)
 
-  if (runState.team.length === 0) return <StarterSelector starters={runState.starterMons} />
-
-  return (
-    <BattleProvider enemy={16}>
-      <BattleScene />
-    </BattleProvider>
-  )
+  if (event === 'STARTER') return <StarterSelector />
+  if (event === 'BATTLE') return <Battle />
 }
