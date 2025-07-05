@@ -1,6 +1,17 @@
 .container {
-  /* border-style: double;
-  border-width: 4px;
-  border-radius: 4px;
-  border-color: black; */
+  display: grid;
+  grid-template-rows: 'menu game';
+  align-items: center;
+
+  max-width: 60ch;
+  margin-inline: auto;
+
+  & > *:nth-child(2) {
+    aspect-ratio: 4 / 3;
+
+    border-style: double;
+    border-width: 5px;
+    border-radius: 6px;
+    border-color: black;
+  }
 }

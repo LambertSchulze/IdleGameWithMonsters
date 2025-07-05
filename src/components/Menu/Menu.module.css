@@ -1,0 +1,20 @@
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2ch;
+
+  margin-block: 2ch;
+
+  li {
+    list-style-type: none;
+
+    button {
+      border: none;
+      background: none;
+      font-size: unset;
+
+      padding: 0;
+    }
+  }
+}
