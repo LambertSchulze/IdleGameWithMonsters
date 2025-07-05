@@ -3,7 +3,6 @@ import type { MonDetailData, MonName } from '../../store/pokemonApi'
 
 export interface TeamMemberData {
   name: MonName
-  level: number
   kills: number
 }
 
@@ -13,9 +12,7 @@ export const Team: FC<Props> = props => {
   return (
     <div>
       <img src={props.spriteBack} alt="" />
-      <p>
-        Lvl. {props.level} {props.name}
-      </p>
+      <p>{props.name}</p>
       <p>Kills: {props.kills}</p>
     </div>
   )
