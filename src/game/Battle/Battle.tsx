@@ -1,12 +1,10 @@
+import styles from './Battle.module.css'
 import { useReducer, useState, useEffect, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery, type MonDetailData } from '../../store/pokemonApi'
-import { incrementKillCount, type TeamMember } from '../../store/teamSlice'
-
-interface Enemy extends MonDetailData {
-  level: number
-  health: number
-}
+import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
+import { incrementKillCount } from '../../store/teamSlice'
+import { Team } from '../Team/Team'
+import { Enemy, type EnemyData } from '../Enemy/Enemy'
 
 const States = {
   ROLL_ENEMY: 'ROLL_ENEMY',
@@ -15,7 +13,7 @@ const States = {
   BATTLE: 'BATTLE',
   GIVE_REWARDS: 'GIVE_REWARDS'
 } as const
-type StateType = keyof typeof States
+export type BattleStateType = keyof typeof States
 
 const Actions = {
   START_BATTLE: 'START_BATTLE',
@@ -25,7 +23,7 @@ const Actions = {
 } as const
 type ActionType = keyof typeof Actions
 
-function reducer(_: StateType, action: ActionType) {
+function reducer(_: BattleStateType, action: ActionType) {
   switch (action) {
     case Actions.START_BATTLE:
       return States.BATTLE
@@ -39,20 +37,32 @@ function reducer(_: StateType, action: ActionType) {
   }
 }
 
+function getRandomItemFrom<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
 export const Battle = () => {
   const [battleState, dispatchState] = useReducer(reducer, States.LOADING)
   const dispatch = useAppDispatch()
-  const team = useAppSelector(state => state.teamState[0])
+  const teamMemberData = useAppSelector(state => state.teamState[0])
+  const { data: teamMonDetailData, isSuccess: teamMonDetailDataReady } = useMonDetailQuery(
+    teamMemberData.name
+  )
+
   const encounters = useAppSelector(state => state.runState.encounters)
   const newEnemy = useCallback(() => {
-    return encounters[Math.floor(Math.random() * encounters.length)]
+    return getRandomItemFrom(encounters)
   }, [encounters])
-  const [enemyId, setEnemyId] = useState<number>(newEnemy())
-  const { data: enemyData, isSuccess: dataLoaded } = useMonDetailQuery(enemyId)
-  const [enemyHealth, setEnemyHealth] = useState<number>(0)
+  const [enemyId, setEnemyId] = useState<MonName>(newEnemy())
+  const { data: enemyMonDetailData, isSuccess: enemyMonDetailDataReady } =
+    useMonDetailQuery(enemyId)
+  const [enemyData, setEnemyData] = useState<EnemyData>({ health: 0, level: 1 })
 
   const attack = () => {
-    setEnemyHealth(health => health - 5)
+    setEnemyData(data => ({
+      ...data,
+      health: data.health - 5
+    }))
   }
 
   useEffect(() => {
@@ -61,8 +71,11 @@ export const Battle = () => {
       dispatchState(Actions.WAIT_FOR_DATA)
     }
     if (battleState === States.LOADING) {
-      if (dataLoaded) {
-        setEnemyHealth(enemyData.hp)
+      if (enemyMonDetailDataReady) {
+        setEnemyData(data => ({
+          ...data,
+          health: enemyMonDetailData.hp
+        }))
         dispatchState(Actions.START_BATTLE)
       }
     }
@@ -70,13 +83,13 @@ export const Battle = () => {
       dispatch(incrementKillCount())
       dispatchState(Actions.NEW_ENCOUNTER)
     }
-  }, [battleState, newEnemy, dispatch, dataLoaded, enemyData])
+  }, [battleState, newEnemy, dispatch, enemyMonDetailDataReady, enemyMonDetailData])
 
   useEffect(() => {
-    if (enemyHealth <= 0) {
+    if (enemyData.health <= 0) {
       dispatchState(Actions.BATTLE_WON)
     }
-  }, [enemyHealth])
+  }, [enemyData])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -86,40 +99,14 @@ export const Battle = () => {
     return () => clearInterval(interval)
   }, [])
 
-  if (!team) return null
-
   return (
-    <div>
-      <Team member={team} attack={attack} />
-      {battleState === States.BATTLE && dataLoaded && (
-        <Enemy data={{ ...enemyData, level: 1, health: enemyHealth }} />
+    <div className={styles.container}>
+      {teamMemberData && teamMonDetailDataReady && (
+        <Team {...teamMonDetailData} {...teamMemberData} />
       )}
-    </div>
-  )
-}
-
-const Enemy = ({ data }: { data: Enemy }) => {
-  return (
-    <div>
-      <img src={data.spriteFront} alt="" />
-      <p>Lvl. 1 {data.name}</p>
-      {data.health} <meter id="enemy_hp" min="0" max={data.hp} value={data.health}></meter>{' '}
-      {data.hp}
-    </div>
-  )
-}
-
-const Team = ({ member, attack }: { member: TeamMember; attack: () => void }) => {
-  const { data } = useMonDetailQuery(member.name)
-
-  return (
-    <div>
-      <img src={data?.spriteBack} alt="" />
-      <p>
-        Lvl. {member.level} {member.name}
-      </p>
-      <button onClick={attack}>Attack!</button>
-      <p>Kills: {member.kills}</p>
+      {battleState === States.BATTLE && enemyMonDetailDataReady && (
+        <Enemy {...enemyMonDetailData} {...enemyData} />
+      )}
     </div>
   )
 }

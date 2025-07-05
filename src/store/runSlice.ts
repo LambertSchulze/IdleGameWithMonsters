@@ -1,14 +1,15 @@
+import type { MonName } from './pokemonApi'
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface RunState {
-  starterMons: string[]
-  encounters: string[]
+  starterMons: MonName[]
+  encounters: MonName[]
   event: 'STARTER' | 'BATTLE'
 }
 
 const initialState: RunState = {
-  starterMons: ['bulbasaur', 'charmander', 'squirtle'],
-  encounters: ['rattata', 'pidgey'],
+  starterMons: ['bulbasaur', 'charmander', 'squirtle'] as MonName[],
+  encounters: ['rattata', 'pidgey'] as MonName[],
   event: 'STARTER'
 }
 

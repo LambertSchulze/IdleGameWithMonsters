@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+export type MonName = string & { type: 'MonName' }
+
 interface PokemonDetailApi {
-  name: string
+  name: MonName
   sprites: {
     front_default: string
     back_default: string
@@ -47,7 +49,7 @@ interface PokemonDetailApi {
 }
 
 export interface MonDetailData {
-  name: string
+  name: MonName
   hp: number
   attack: number
   defense: number
@@ -64,7 +66,7 @@ export const pokemonApi = createApi({
     baseUrl: 'https://pokeapi.co/api/v2/'
   }),
   endpoints: build => ({
-    monDetail: build.query<MonDetailData, string>({
+    monDetail: build.query<MonDetailData, MonName>({
       query: slug => `pokemon/${slug}/`,
       transformResponse: (result: PokemonDetailApi) => ({
         name: result.name,

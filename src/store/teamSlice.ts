@@ -1,18 +1,14 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-
-export interface TeamMember {
-  name: string
-  level: number
-  kills: number
-}
+import type { MonName } from './pokemonApi'
+import type { TeamMemberData } from '../game/Team/Team'
 
 export interface TeamState {
-  0: TeamMember
+  0: TeamMemberData
 }
 
 const initialState: TeamState = {
   0: {
-    name: '',
+    name: '' as MonName,
     level: 1,
     kills: 0
   }
@@ -22,7 +18,7 @@ export const teamSlice = createSlice({
   name: 'teamState',
   initialState,
   reducers: {
-    addToTeam(state, mon: PayloadAction<TeamMember>) {
+    addToTeam(state, mon: PayloadAction<TeamMemberData>) {
       const member = mon.payload
       state[0] = member
     },

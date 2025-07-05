@@ -1,6 +1,6 @@
 import styles from './StarterSelector.module.css'
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery } from '../../store/pokemonApi'
+import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
 import { addToTeam } from '../../store/teamSlice'
 import { setEventToBattle } from '../../store/runSlice'
 
@@ -19,7 +19,7 @@ export const StarterSelector = () => {
   )
 }
 
-const Starter = ({ name }: { name: string }) => {
+const Starter = ({ name }: { name: MonName }) => {
   const { data, isSuccess } = useMonDetailQuery(name)
   const dispatch = useAppDispatch()
 
