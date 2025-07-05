@@ -110,9 +110,11 @@ const Enemy = ({ data }: { data: Enemy }) => {
 }
 
 const Team = ({ member, attack }: { member: TeamMember; attack: () => void }) => {
+  const { data } = useMonDetailQuery(member.name)
+
   return (
     <div>
-      <img src={member.spriteBack} alt="" />
+      <img src={data?.spriteBack} alt="" />
       <p>
         Lvl. {member.level} {member.name}
       </p>

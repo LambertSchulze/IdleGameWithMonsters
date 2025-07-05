@@ -1,17 +1,21 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type MonDetailData } from './pokemonApi'
 
-export interface TeamMember extends MonDetailData {
+export interface TeamMember {
+  name: string
   level: number
   kills: number
 }
 
 export interface TeamState {
-  0: TeamMember | null
+  0: TeamMember
 }
 
 const initialState: TeamState = {
-  0: null
+  0: {
+    name: '',
+    level: 1,
+    kills: 0
+  }
 }
 
 export const teamSlice = createSlice({

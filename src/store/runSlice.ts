@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface RunState {
-  starterMons: number[]
-  encounters: number[]
+  starterMons: string[]
+  encounters: string[]
   event: 'STARTER' | 'BATTLE'
 }
 
 const initialState: RunState = {
-  starterMons: [1, 4, 7],
-  encounters: [16, 19],
+  starterMons: ['bulbasaur', 'charmander', 'squirtle'],
+  encounters: ['rattata', 'pidgey'],
   event: 'STARTER'
 }
 

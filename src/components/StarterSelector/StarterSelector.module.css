@@ -2,16 +2,35 @@
   text-align: center;
 }
 
-.startersContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 1ch;
+
+  margin: 1ch;
 }
 
-.profileImage {
+.button {
+  background: none;
+  border: solid 4px transparent;
+
+  &:hover,
+  &:active {
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 6px;
+    border-color: black;
+  }
+}
+
+.image {
   display: block;
+  margin-inline: auto;
 }
 
-.profileButton {
-  width: 100%;
+.name {
+  font-family: 'Press Start 2P';
+  text-transform: capitalize;
+
+  margin-block-start: 0;
 }

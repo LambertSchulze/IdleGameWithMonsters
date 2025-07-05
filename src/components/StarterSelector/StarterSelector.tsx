@@ -9,33 +9,31 @@ export const StarterSelector = () => {
 
   return (
     <div>
-      <h2 className={styles.heading}>Select your Starter Mon</h2>
-      <div className={styles.startersContainer}>
-        {starters.map(id => (
-          <MonProfile key={id} id={id} />
+      <h2 className={styles.heading}>Select your Starter</h2>
+      <div className={styles.container}>
+        {starters.map(name => (
+          <Starter key={name} name={name} />
         ))}
       </div>
     </div>
   )
 }
 
-const MonProfile = ({ id }: { id: number }) => {
-  const { data, isSuccess } = useMonDetailQuery(id)
+const Starter = ({ name }: { name: string }) => {
+  const { data, isSuccess } = useMonDetailQuery(name)
   const dispatch = useAppDispatch()
 
   const choose = () => {
     if (!isSuccess) return
 
-    dispatch(addToTeam({ ...data, level: 1, kills: 0 }))
+    dispatch(addToTeam({ name, level: 1, kills: 0 }))
     dispatch(setEventToBattle())
   }
 
   return (
-    <div>
-      <img src={data?.spriteFront} alt="" width={96} height={96} className={styles.profileImage} />
-      <button onClick={choose} className={styles.profileButton}>
-        {data?.name ?? '???'}
-      </button>
-    </div>
+    <button onClick={choose} className={styles.button} disabled={!isSuccess}>
+      <img src={data?.spriteFront} alt="" width={96} height={96} className={styles.image} />
+      <p className={styles.name}>{data?.name ?? '???'}</p>
+    </button>
   )
 }
