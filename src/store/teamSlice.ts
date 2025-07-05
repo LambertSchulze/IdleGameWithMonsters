@@ -9,7 +9,6 @@ export interface TeamState {
 const initialState: TeamState = {
   0: {
     name: '' as MonName,
-    level: 1,
     kills: 0
   }
 }
