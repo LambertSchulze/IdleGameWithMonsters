@@ -2,7 +2,7 @@ import styles from './StatsDashboard.module.css'
 import { useAppSelector } from '../../store/store'
 
 export const StatsDashboard = () => {
-  const runState = useAppSelector(state => state.runState)
+  const runState = useAppSelector(state => state.gameState)
 
   return (
     <dialog id="stats-dashboard" popover="auto" className={styles.component}>

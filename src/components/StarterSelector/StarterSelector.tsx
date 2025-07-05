@@ -2,10 +2,10 @@ import styles from './StarterSelector.module.css'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
 import { addToTeam } from '../../store/teamSlice'
-import { setEventToBattle } from '../../store/runSlice'
+import { setEventToBattle } from '../../store/gameSlice'
 
 export const StarterSelector = () => {
-  const starters = useAppSelector(state => state.runState.starterMons)
+  const starters = useAppSelector(state => state.gameState.starterMons)
 
   return (
     <div>
@@ -26,7 +26,7 @@ const Starter = ({ name }: { name: MonName }) => {
   const choose = () => {
     if (!isSuccess) return
 
-    dispatch(addToTeam({ name, level: 1, kills: 0 }))
+    dispatch(addToTeam({ name, kills: 0 }))
     dispatch(setEventToBattle())
   }
 

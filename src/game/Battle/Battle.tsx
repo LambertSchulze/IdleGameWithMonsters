@@ -1,10 +1,11 @@
 import styles from './Battle.module.css'
-import { useReducer, useState, useEffect, useCallback } from 'react'
+import { useReducer, useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
+import { useMonDetailQuery } from '../../store/pokemonApi'
 import { incrementKillCount } from '../../store/teamSlice'
 import { Team } from '../Team/Team'
-import { Enemy, type EnemyData } from '../Enemy/Enemy'
+import { Enemy } from '../Enemy/Enemy'
+import { useEncounter } from '../Encounter/useEncounter'
 
 const States = {
   ROLL_ENEMY: 'ROLL_ENEMY',
@@ -37,10 +38,6 @@ function reducer(_: BattleStateType, action: ActionType) {
   }
 }
 
-function getRandomItemFrom<T>(array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
 export const Battle = () => {
   const [battleState, dispatchState] = useReducer(reducer, States.LOADING)
   const dispatch = useAppDispatch()
@@ -49,33 +46,22 @@ export const Battle = () => {
     teamMemberData.name
   )
 
-  const encounters = useAppSelector(state => state.runState.encounters)
-  const newEnemy = useCallback(() => {
-    return getRandomItemFrom(encounters)
-  }, [encounters])
-  const [enemyId, setEnemyId] = useState<MonName>(newEnemy())
+  const { currentEncounter, getNewEncounter } = useEncounter()
   const { data: enemyMonDetailData, isSuccess: enemyMonDetailDataReady } =
-    useMonDetailQuery(enemyId)
-  const [enemyData, setEnemyData] = useState<EnemyData>({ health: 0, level: 1 })
+    useMonDetailQuery(currentEncounter)
+  const [damage, setDamage] = useState<number>(0)
 
   const attack = () => {
-    setEnemyData(data => ({
-      ...data,
-      health: data.health - 5
-    }))
+    setDamage(current => current + 5)
   }
 
   useEffect(() => {
     if (battleState === States.ROLL_ENEMY) {
-      setEnemyId(newEnemy())
+      getNewEncounter()
       dispatchState(Actions.WAIT_FOR_DATA)
     }
     if (battleState === States.LOADING) {
       if (enemyMonDetailDataReady) {
-        setEnemyData(data => ({
-          ...data,
-          health: enemyMonDetailData.hp
-        }))
         dispatchState(Actions.START_BATTLE)
       }
     }
@@ -83,13 +69,13 @@ export const Battle = () => {
       dispatch(incrementKillCount())
       dispatchState(Actions.NEW_ENCOUNTER)
     }
-  }, [battleState, newEnemy, dispatch, enemyMonDetailDataReady, enemyMonDetailData])
+  }, [battleState, getNewEncounter, dispatch, enemyMonDetailDataReady, enemyMonDetailData])
 
   useEffect(() => {
-    if (enemyData.health <= 0) {
+    if (enemyMonDetailDataReady && enemyMonDetailData.hp <= damage) {
       dispatchState(Actions.BATTLE_WON)
     }
-  }, [enemyData])
+  }, [enemyMonDetailData, enemyMonDetailDataReady, damage])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,7 +91,7 @@ export const Battle = () => {
         <Team {...teamMonDetailData} {...teamMemberData} />
       )}
       {battleState === States.BATTLE && enemyMonDetailDataReady && (
-        <Enemy {...enemyMonDetailData} {...enemyData} />
+        <Enemy {...enemyMonDetailData} health={enemyMonDetailData.hp - damage} />
       )}
     </div>
   )
