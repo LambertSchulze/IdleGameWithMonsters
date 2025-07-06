@@ -58,6 +58,7 @@ export const Battle = () => {
   useEffect(() => {
     if (battleState === States.ROLL_ENEMY) {
       getNewEncounter()
+      setDamage(0)
       dispatchState(Actions.WAIT_FOR_DATA)
     }
     if (battleState === States.LOADING) {
