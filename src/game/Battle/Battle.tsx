@@ -1,6 +1,7 @@
 import styles from './Battle.module.css'
 import { useReducer, useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/store'
+import { addToDeck } from '../../store/deckSlice'
 import { useMonDetailQuery, type MoveName } from '../../store/pokemonApi'
 import { Team } from '../../components/Team/Team'
 import { Enemy } from '../../components/Enemy/Enemy'
@@ -55,6 +56,7 @@ export const Battle = () => {
   useEffect(() => {
     if (battleState === States.ROLL_ENEMY) {
       getNewEncounter()
+      dispatch(addToDeck(currentEncounter))
       setDamage(0)
       dispatchState(Actions.WAIT_FOR_DATA)
     }
