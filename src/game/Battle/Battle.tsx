@@ -1,11 +1,11 @@
 import styles from './Battle.module.css'
 import { useReducer, useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery } from '../../store/pokemonApi'
-import { incrementKillCount } from '../../store/teamSlice'
+import { useMonDetailQuery, type MoveName } from '../../store/pokemonApi'
 import { Team } from '../Team/Team'
 import { Enemy } from '../Enemy/Enemy'
 import { useEncounter } from '../Encounter/useEncounter'
+import { useDamageCalculator } from '../Damage/damageCalculator'
 
 const States = {
   ROLL_ENEMY: 'ROLL_ENEMY',
@@ -49,11 +49,8 @@ export const Battle = () => {
   const { currentEncounter, getNewEncounter } = useEncounter()
   const { data: enemyMonDetailData, isSuccess: enemyMonDetailDataReady } =
     useMonDetailQuery(currentEncounter)
-  const [damage, setDamage] = useState<number>(0)
-
-  const attack = () => {
-    setDamage(current => current + 5)
-  }
+  const { damageCalculator } = useDamageCalculator()
+  const [damage, setDamage] = useState(0)
 
   useEffect(() => {
     if (battleState === States.ROLL_ENEMY) {
@@ -67,24 +64,35 @@ export const Battle = () => {
       }
     }
     if (battleState === States.GIVE_REWARDS) {
-      dispatch(incrementKillCount())
       dispatchState(Actions.NEW_ENCOUNTER)
     }
   }, [battleState, getNewEncounter, dispatch, enemyMonDetailDataReady, enemyMonDetailData])
 
   useEffect(() => {
-    if (enemyMonDetailDataReady && enemyMonDetailData.hp <= damage) {
+    if (enemyMonDetailDataReady && enemyMonDetailData.stats.hp <= damage) {
       dispatchState(Actions.BATTLE_WON)
     }
   }, [enemyMonDetailData, enemyMonDetailDataReady, damage])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      attack()
-    }, 1000)
+      if (teamMonDetailData && enemyMonDetailData) {
+        setDamage(
+          damage =>
+            damage +
+            damageCalculator(teamMonDetailData, enemyMonDetailData, {
+              power: 50,
+              name: 'exampleMove' as MoveName,
+              type: 'normal',
+              damageClass: 'physical'
+            })
+        )
+        return
+      }
+    }, 500)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [teamMonDetailData, enemyMonDetailData, damageCalculator])
 
   return (
     <div className={styles.container}>
@@ -92,7 +100,7 @@ export const Battle = () => {
         <Team {...teamMonDetailData} {...teamMemberData} />
       )}
       {battleState === States.BATTLE && enemyMonDetailDataReady && (
-        <Enemy {...enemyMonDetailData} health={enemyMonDetailData.hp - damage} />
+        <Enemy {...enemyMonDetailData} health={enemyMonDetailData.stats.hp - damage} />
       )}
     </div>
   )
