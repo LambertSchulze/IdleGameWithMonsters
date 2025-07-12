@@ -1,12 +1,14 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type MonName } from './pokemonApi'
 
+export interface DeckEntry {
+  name: MonName
+  spotted: number
+  caught?: number
+}
+
 export interface DeckState {
-  [key: MonName]: {
-    name: MonName
-    spotted: number
-    caught?: number
-  }
+  [key: MonName]: DeckEntry
 }
 
 const initialState: DeckState = {}

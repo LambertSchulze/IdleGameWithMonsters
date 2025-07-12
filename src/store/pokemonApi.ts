@@ -127,6 +127,23 @@ export interface MoveDetailData {
   damageClass: DamageClassName
 }
 
+interface PokedexApi {
+  id: number
+  pokemon_entries: {
+    entry_number: number
+    pokemon_species: {
+      name: MonName
+    }
+  }[]
+}
+
+export interface PokedexData {
+  entries: {
+    id: number
+    name: MonName
+  }[]
+}
+
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({
@@ -188,8 +205,18 @@ export const pokemonApi = createApi({
         type: result.type.name,
         damageClass: result.damage_class.name
       })
+    }),
+    pokedex: build.query<PokedexData, number>({
+      query: id => `pokedex/${id}`,
+      transformResponse: (result: PokedexApi) => ({
+        entries: result.pokemon_entries.map(entry => ({
+          id: entry.entry_number,
+          name: entry.pokemon_species.name
+        }))
+      })
     })
   })
 })
 
-export const { useMonDetailQuery, useTypeDetailQuery, useMoveDetailQuery } = pokemonApi
+export const { useMonDetailQuery, useTypeDetailQuery, useMoveDetailQuery, usePokedexQuery } =
+  pokemonApi

@@ -68,7 +68,14 @@ export const Battle = () => {
     if (battleState === States.GIVE_REWARDS) {
       dispatchState(Actions.NEW_ENCOUNTER)
     }
-  }, [battleState, getNewEncounter, dispatch, enemyMonDetailDataReady, enemyMonDetailData])
+  }, [
+    battleState,
+    getNewEncounter,
+    dispatch,
+    enemyMonDetailDataReady,
+    enemyMonDetailData,
+    currentEncounter
+  ])
 
   useEffect(() => {
     if (enemyMonDetailDataReady && enemyMonDetailData.stats.hp <= damage) {
