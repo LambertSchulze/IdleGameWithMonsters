@@ -137,11 +137,13 @@ interface PokedexApi {
   }[]
 }
 
+export interface PokedexEntry {
+  id: number
+  name: MonName
+}
+
 export interface PokedexData {
-  entries: {
-    id: number
-    name: MonName
-  }[]
+  [key: MonName]: PokedexEntry
 }
 
 export const pokemonApi = createApi({
@@ -208,12 +210,18 @@ export const pokemonApi = createApi({
     }),
     pokedex: build.query<PokedexData, number>({
       query: id => `pokedex/${id}`,
-      transformResponse: (result: PokedexApi) => ({
-        entries: result.pokemon_entries.map(entry => ({
-          id: entry.entry_number,
-          name: entry.pokemon_species.name
-        }))
-      })
+      transformResponse: (result: PokedexApi) => {
+        const pokedex: PokedexData = {}
+
+        result.pokemon_entries.forEach(entry => {
+          pokedex[entry.pokemon_species.name] = {
+            name: entry.pokemon_species.name,
+            id: entry.entry_number
+          }
+        })
+
+        return pokedex
+      }
     })
   })
 })

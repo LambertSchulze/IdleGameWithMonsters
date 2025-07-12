@@ -19,7 +19,7 @@ export const HealthBar: FC<Props> = ({ health, stats, className }) => {
         high={stats.hp / 2}
         optimum={stats.hp}
         value={health}
-        className={`${styles.component} ${className}`}
+        className={`${styles.component} ${className ?? ''}`}
       ></meter>{' '}
       {stats.hp}
     </>
