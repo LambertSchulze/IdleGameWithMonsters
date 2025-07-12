@@ -1,4 +1,7 @@
 .component {
-  font-family: 'Press Start 2P';
   text-transform: capitalize;
+
+  &:not(:global(.smaller)) {
+    font-family: 'Press Start 2P';
+  }
 }

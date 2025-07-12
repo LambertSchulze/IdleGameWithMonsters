@@ -2,3 +2,9 @@
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(1px);
 }
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 1ch;
+}

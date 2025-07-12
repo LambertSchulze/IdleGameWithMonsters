@@ -12,10 +12,10 @@ export const Image: FC<Partial<Props>> = ({ sprites, front, back, className }) =
   return (
     <img
       src={sprites && (front ? sprites.front : back ? sprites.back : '')}
-      alt={`${front && 'Front'}${back && 'Back'} side of the Mon`}
+      alt=""
       width={96}
       height={96}
-      className={`${style.component} ${className}`}
+      className={`${style.component} ${className ?? ''}`}
     />
   )
 }
