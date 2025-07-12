@@ -12,9 +12,9 @@ export interface Props extends Pick<MonDetailData, 'name' | 'stats' | 'sprites'>
 export const Enemy: FC<Props> = props => {
   return (
     <div>
-      <Image front sprites={props.sprites} />
+      <Image front sprites={props.sprites} className={styles.image} />
       <MonName name={props.name} className={styles.name} />
-      <HealthBar health={props.health} stats={props.stats} />
+      <HealthBar health={props.health} stats={props.stats} className={styles.healthbar} />
     </div>
   )
 }

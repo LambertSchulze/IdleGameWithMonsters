@@ -1,0 +1,11 @@
+.caught {
+  p {
+    text-decoration: underline;
+  }
+}
+
+.spotted {
+  img {
+    filter: grayscale(1);
+  }
+}

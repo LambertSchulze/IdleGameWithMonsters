@@ -8,8 +8,8 @@ type Props = Pick<MonDetailData, 'name' | 'sprites'>
 
 export const Team: FC<Props> = props => {
   return (
-    <div>
-      <Image back sprites={props.sprites} />
+    <div className={styles.component}>
+      <Image back sprites={props.sprites} className={styles.image} />
       <MonName name={props.name} className={styles.name} />
     </div>
   )
