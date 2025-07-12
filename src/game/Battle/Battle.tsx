@@ -7,6 +7,7 @@ import { Team } from '../../components/Team/Team'
 import { Enemy } from '../../components/Enemy/Enemy'
 import { useEncounter } from '../Encounter/useEncounter'
 import { useDamageCalculator } from '../Damage/damageCalculator'
+import { addExp } from '../../store/gameSlice'
 
 const States = {
   ROLL_ENEMY: 'ROLL_ENEMY',
@@ -66,7 +67,10 @@ export const Battle = () => {
       }
     }
     if (battleState === States.GIVE_REWARDS) {
-      dispatchState(Actions.NEW_ENCOUNTER)
+      if (enemyMonDetailDataReady) {
+        dispatch(addExp(enemyMonDetailData.baseExp))
+        dispatchState(Actions.NEW_ENCOUNTER)
+      }
     }
   }, [
     battleState,

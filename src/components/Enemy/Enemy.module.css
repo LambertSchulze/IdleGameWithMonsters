@@ -1,3 +1,12 @@
+.image {
+  margin-inline: auto;
+}
+
 .name {
   margin-block-start: 0;
+}
+
+.healthbar {
+  width: fit-content;
+  margin-inline: auto;
 }

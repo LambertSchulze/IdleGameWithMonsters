@@ -31,6 +31,7 @@ interface PokemonDetailApi {
     front_default: string
     back_default: string
   }
+  base_experience: number
   stats: {
     base_stat: number
     stat: {
@@ -61,6 +62,7 @@ interface PokemonDetailApi {
 
 export interface MonDetailData {
   name: MonName
+  baseExp: number
   stats: {
     hp: number
     attack: number
@@ -156,6 +158,7 @@ export const pokemonApi = createApi({
       query: slug => `pokemon/${slug}/`,
       transformResponse: (result: PokemonDetailApi) => ({
         name: result.name,
+        baseExp: result.base_experience,
         stats: {
           hp: result.stats.find(s => s.stat.name === 'hp')!.base_stat,
           attack: result.stats.find(s => s.stat.name === 'attack')!.base_stat,

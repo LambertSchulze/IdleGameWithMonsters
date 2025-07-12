@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 import { Layout } from './components/Layout/Layout'
+import { TotalExp } from './components/TotalExp/TotalExp'
 import { Game } from './game/Game'
 import { StatsDashboard } from './components/StatsDashboard/StatsDashboard'
 import { Menu } from './components/Menu/Menu'
@@ -11,6 +12,7 @@ function App() {
     <Provider store={store}>
       <Layout>
         <Menu />
+        <TotalExp />
         <Game />
         <Pokedex />
         <StatsDashboard />

@@ -9,7 +9,7 @@ interface Props extends Pick<MonDetailData, 'stats'> {
 
 export const HealthBar: FC<Props> = ({ health, stats, className }) => {
   return (
-    <>
+    <div className={`${styles.component} ${className ?? ''}`}>
       {health}{' '}
       <meter
         id={`health_bar`}
@@ -19,9 +19,9 @@ export const HealthBar: FC<Props> = ({ health, stats, className }) => {
         high={stats.hp / 2}
         optimum={stats.hp}
         value={health}
-        className={`${styles.component} ${className ?? ''}`}
+        className={styles.meter}
       ></meter>{' '}
       {stats.hp}
-    </>
+    </div>
   )
 }

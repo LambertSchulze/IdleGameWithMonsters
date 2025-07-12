@@ -1,5 +1,6 @@
 .component {
   text-transform: capitalize;
+  text-align: center;
 
   &:not(:global(.smaller)) {
     font-family: 'Press Start 2P';

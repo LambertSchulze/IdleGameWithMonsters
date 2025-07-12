@@ -6,7 +6,7 @@
   max-width: 60ch;
   margin-inline: auto;
 
-  & > *:nth-child(2) {
+  & > *:nth-child(3) {
     aspect-ratio: 4 / 3;
 
     border-style: double;
