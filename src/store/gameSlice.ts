@@ -23,7 +23,7 @@ export const gameSlice = createSlice({
       state.exp += exp.payload
     },
     incrementStageId(state) {
-      state.stageId += 1
+      state.stageId++
     }
   }
 })

@@ -8,6 +8,6 @@ export const Game = () => {
   if (stageId === 0) {
     return <StarterSelector />
   } else {
-    return <Battle />
+    return <Battle key={stageId} />
   }
 }
