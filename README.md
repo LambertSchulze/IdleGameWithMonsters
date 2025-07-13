@@ -18,11 +18,11 @@ That's when I thought _"Maybe you could make some little Pokémon Idle game"_
 - [x] Get to minimum Tracer Bullet Stage
 - [ ] Damage is dealt the Pokémon way
 - [ ] Animations for attacking and taking damage
-- [ ] After winning a battle the Pokémon on the next stage is one level up
-- [ ] Winning a battle gives Experience points
+- [x] After winning a battle the Pokémon on the next stage is one level up
+- [x] Winning a battle gives Experience points
 - [ ] You can level up your own Pokémon
 - [ ] While going through stages you encounter Pokémon from the game regions
-- [ ] Encountering Pokémon fills your Pokédex
+- [x] Encountering Pokémon fills your Pokédex
 - [ ] You can catch Pokémon
 - [ ] You can add cought Pokémon to your team
 - [ ] Stats for a Stats Page
