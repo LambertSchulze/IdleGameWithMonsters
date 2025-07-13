@@ -3,16 +3,16 @@ import type { MonName } from './pokemonApi'
 
 export interface GameState {
   exp: number
+  stageId: number
   starterMons: MonName[]
   encounters: MonName[]
-  event: 'STARTER' | 'BATTLE'
 }
 
 const initialState: GameState = {
   exp: 0,
+  stageId: 0,
   starterMons: ['bulbasaur', 'charmander', 'squirtle'] as MonName[],
-  encounters: ['rattata', 'pidgey', 'caterpie', 'weedle', 'spearow'] as MonName[],
-  event: 'STARTER'
+  encounters: ['rattata', 'pidgey', 'caterpie', 'weedle', 'spearow'] as MonName[]
 }
 
 export const gameSlice = createSlice({
@@ -22,10 +22,10 @@ export const gameSlice = createSlice({
     addExp(state, exp: PayloadAction<number>) {
       state.exp += exp.payload
     },
-    setEventToBattle(state) {
-      state.event = 'BATTLE'
+    incrementStageId(state) {
+      state.stageId++
     }
   }
 })
 
-export const { addExp, setEventToBattle } = gameSlice.actions
+export const { addExp, incrementStageId } = gameSlice.actions

@@ -8,11 +8,11 @@ function getRandomItemFrom<T>(array: T[]): T {
 
 export const useEncounter = () => {
   const encounters = useAppSelector(state => state.gameState.encounters)
-  const [currentEncounter, setCurrentEncounter] = useState<MonName>(getRandomItemFrom(encounters))
+  const [encounter, setEncounter] = useState<MonName>(getRandomItemFrom(encounters))
 
   const getNewEncounter = () => {
-    setCurrentEncounter(getRandomItemFrom(encounters))
+    setEncounter(getRandomItemFrom(encounters))
   }
 
-  return { currentEncounter, getNewEncounter }
+  return [encounter, getNewEncounter] as const
 }

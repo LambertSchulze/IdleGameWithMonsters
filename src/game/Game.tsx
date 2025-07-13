@@ -3,8 +3,11 @@ import { StarterSelector } from '../components/StarterSelector/StarterSelector'
 import { Battle } from './Battle/Battle'
 
 export const Game = () => {
-  const event = useAppSelector(state => state.gameState.event)
+  const stageId = useAppSelector(state => state.gameState.stageId)
 
-  if (event === 'STARTER') return <StarterSelector />
-  if (event === 'BATTLE') return <Battle />
+  if (stageId === 0) {
+    return <StarterSelector />
+  } else {
+    return <Battle key={stageId} />
+  }
 }
