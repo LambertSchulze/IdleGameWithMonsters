@@ -57,7 +57,7 @@ export const Battle = () => {
       dispatchState(Actions.LOADING_FINISHED)
     }
     if (battleState === States.BATTLE_END) {
-      dispatch(addExp(enemyMonDetailData!.baseExp))
+      dispatch(addExp((enemyMonDetailData!.baseExp * enemyLevel) / 7))
       progressToNextStage()
     }
   }, [
