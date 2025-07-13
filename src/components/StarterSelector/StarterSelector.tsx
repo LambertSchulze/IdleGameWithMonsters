@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store'
 import { useMonDetailQuery, type MonName, type MoveName } from '../../store/pokemonApi'
 import { addToDeck, captureMon } from '../../store/deckSlice'
 import { addToTeam } from '../../store/teamSlice'
-import { setEventToBattle } from '../../store/gameSlice'
+import { incrementStageId } from '../../store/gameSlice'
 import { Image } from '../Image/Image'
 import { MonName as MonNameComponent } from '../MonName/MonName'
 
@@ -39,7 +39,7 @@ const Starter = ({ name }: { name: MonName }) => {
 
     dispatch(captureMon(name))
     dispatch(addToTeam({ name, attack: 'Tackle' as MoveName }))
-    dispatch(setEventToBattle())
+    dispatch(incrementStageId())
   }
 
   return (
