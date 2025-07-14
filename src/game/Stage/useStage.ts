@@ -1,21 +1,4 @@
-import { useCallback } from 'react'
-import { incrementStageId } from '../../store/gameSlice'
-import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useEncounter } from '../Encounter/useEncounter'
+import { useContext } from 'react'
+import { StageContext } from './StageContext'
 
-export const useStage = () => {
-  const stageId = useAppSelector(state => state.gameState.stageId)
-  const dispatch = useAppDispatch()
-  const [encounter, getNewEncounter] = useEncounter()
-
-  const progressToNextStage = useCallback(() => {
-    getNewEncounter()
-    dispatch(incrementStageId())
-  }, [dispatch, getNewEncounter])
-
-  return {
-    encounter,
-    enemyLevel: stageId,
-    progressToNextStage
-  }
-}
+export const useStage = () => useContext(StageContext)

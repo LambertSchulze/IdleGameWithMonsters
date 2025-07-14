@@ -8,8 +8,8 @@ I had some Demo of the PokéAPI around because of [@phryneas](https://github.com
 
 Then [some Dunkey Quote](https://youtu.be/c66IR3qA5-w?feature=shared&t=17) hit me:
 
->(Pokémon doesn't) require any reflexes or skill, or any brain power, really, to be bested.
->It's just: _"Select the first on the menu and select it, until the other thing dies."_
+> (Pokémon doesn't) require any reflexes or skill, or any brain power, really, to be bested.
+> It's just: _"Select the first on the menu and select it, until the other thing dies."_
 
 That's when I thought _"Maybe you could make some little Pokémon Idle game"_
 

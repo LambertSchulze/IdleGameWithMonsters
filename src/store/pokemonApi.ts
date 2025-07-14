@@ -85,14 +85,6 @@ export interface MonDetailData {
   }
 }
 
-export interface AttackerMon extends Omit<MonDetailData, 'types' | 'moves'> {
-  types: {
-    1: TypeDetailData
-    2: TypeDetailData | null
-  }
-  moves: MoveDetailData[]
-}
-
 interface TypeDetailApi {
   name: TypeName
   damage_relations: {
@@ -169,7 +161,7 @@ export const pokemonApi = createApi({
         },
         types: {
           1: result.types.find(t => t.slot === 1)!.type.name,
-          2: result.types.find(t => t.slot === 1)?.type.name ?? null
+          2: result.types.find(t => t.slot === 2)?.type.name ?? null
         },
         moves: result.moves
           .filter(move =>

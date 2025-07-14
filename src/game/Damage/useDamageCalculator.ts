@@ -1,4 +1,5 @@
-import type { MonDetailData, MoveDetailData } from '../../store/pokemonApi'
+import type { Team } from '../Team/TeamContext'
+import type { Enemy } from '../Enemy/EnemyContext'
 
 export function useDamageCalculator() {
   // TODO: Calculate Type Effectiveness
@@ -8,13 +9,9 @@ export function useDamageCalculator() {
   const attackerLevel = 1
   const random = Math.floor(Math.random() * (255 - 217 + 1) + 217) / 255
 
-  const damageCalculator = (
-    attacker: MonDetailData,
-    defender: MonDetailData,
-    attack: MoveDetailData
-  ) =>
+  const damageCalculator = (attacker: Team, defender: Enemy) =>
     Math.round(
-      ((((2 * attackerLevel) / 5 + 2) * attack.power * attacker.stats.attack) /
+      ((((2 * attackerLevel) / 5 + 2) * attacker.attack.power * attacker.stats.attack) /
         defender.stats.defense /
         50 +
         2) *

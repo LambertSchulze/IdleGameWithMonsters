@@ -1,11 +1,12 @@
 import styles from './Battle.module.css'
-import { useReducer, useState, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery, type MoveName } from '../../store/pokemonApi'
+import { useReducer, useEffect } from 'react'
+import { useAppDispatch } from '../../store/store'
 import { addToDeck } from '../../store/deckSlice'
 import { addExp } from '../../store/gameSlice'
 import { useStage } from '../Stage/useStage'
-import { useDamageCalculator } from '../Damage/damageCalculator'
+import { useDamageCalculator } from '../Damage/useDamageCalculator'
+import { useTeam } from '../Team/useTeam'
+import { useEnemy } from '../Enemy/useEnemy'
 import { Team } from '../../components/Team/Team'
 import { Enemy } from '../../components/Enemy/Enemy'
 
@@ -36,80 +37,45 @@ const reducer = (_: BattleStateType, action: ActionType) => {
 }
 
 export const Battle = () => {
-  const [battleState, dispatchState] = useReducer(reducer, States.LOADING)
+  const [battleState, dispatchBattle] = useReducer(reducer, States.LOADING)
   const dispatch = useAppDispatch()
-  const teamMemberData = useAppSelector(state => state.teamState[0])
-  const { data: teamMonDetailData, isSuccess: teamMonDetailDataReady } = useMonDetailQuery(
-    teamMemberData.name
-  )
-
-  const { encounter, enemyLevel, progressToNextStage } = useStage()
-  const { data: enemyMonDetailData, isSuccess: enemyMonDetailDataReady } =
-    useMonDetailQuery(encounter)
-
+  const team = useTeam()
+  const enemy = useEnemy()
+  const { progressToNextStage } = useStage()
   const { damageCalculator } = useDamageCalculator()
-  const [damage, setDamage] = useState(0)
 
   useEffect(() => {
-    if (battleState === States.LOADING && teamMonDetailDataReady && enemyMonDetailDataReady) {
-      dispatch(addToDeck(enemyMonDetailData.name))
-      setDamage(0)
-      dispatchState(Actions.LOADING_FINISHED)
+    if (battleState === States.LOADING && team && enemy) {
+      dispatch(addToDeck(enemy.name))
+      dispatchBattle(Actions.LOADING_FINISHED)
     }
     if (battleState === States.BATTLE_END) {
-      dispatch(addExp((enemyMonDetailData!.baseExp * enemyLevel) / 7))
+      dispatch(addExp((enemy!.baseExp * enemy!.level) / 7))
       progressToNextStage()
     }
-  }, [
-    battleState,
-    teamMonDetailDataReady,
-    enemyMonDetailDataReady,
-    enemyMonDetailData,
-    dispatch,
-    dispatchState,
-    setDamage,
-    progressToNextStage
-  ])
+  }, [battleState, team, enemy, dispatch, dispatchBattle, progressToNextStage])
 
   useEffect(() => {
-    if (enemyMonDetailDataReady && enemyHp(enemyMonDetailData.stats.hp, enemyLevel) <= damage) {
-      dispatchState(Actions.END_BATTLE)
+    if (enemy?.isFainted) {
+      dispatchBattle(Actions.END_BATTLE)
     }
-  }, [enemyMonDetailData, enemyMonDetailDataReady, damage, enemyLevel])
+  }, [enemy])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (teamMonDetailData && enemyMonDetailData && battleState === 'BATTLING') {
-        const attack = damageCalculator(teamMonDetailData, enemyMonDetailData, {
-          power: 50,
-          name: 'exampleMove' as MoveName,
-          type: 'normal',
-          damageClass: 'physical'
-        })
-        setDamage(damage => damage + attack)
+      if (team && enemy && battleState === 'BATTLING') {
+        enemy.addDamage(damageCalculator(team, enemy))
         return
       }
     }, 500)
 
     return () => clearInterval(interval)
-  }, [teamMonDetailData, enemyMonDetailData, damageCalculator, battleState])
-
-  const enemyHp = (baseHp: number, level: number) =>
-    Math.floor((baseHp * 2 * level) / 100 + level + 10)
+  }, [team, enemy, damageCalculator, battleState])
 
   return (
     <div className={styles.container}>
-      {teamMemberData && teamMonDetailDataReady && (
-        <Team {...teamMonDetailData} {...teamMemberData} />
-      )}
-      {battleState !== States.LOADING && enemyMonDetailDataReady && (
-        <Enemy
-          {...enemyMonDetailData}
-          health={Math.max(enemyHp(enemyMonDetailData.stats.hp, enemyLevel) - damage, 0)}
-          maxHp={enemyHp(enemyMonDetailData.stats.hp, enemyLevel)}
-          level={enemyLevel}
-        />
-      )}
+      {team && <Team {...team} />}
+      {battleState !== States.LOADING && enemy && <Enemy {...enemy} />}
     </div>
   )
 }

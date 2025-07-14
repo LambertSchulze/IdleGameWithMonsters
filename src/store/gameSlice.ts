@@ -20,7 +20,7 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     addExp(state, exp: PayloadAction<number>) {
-      state.exp += exp.payload
+      state.exp += Math.round(exp.payload)
     },
     incrementStageId(state) {
       state.stageId++
