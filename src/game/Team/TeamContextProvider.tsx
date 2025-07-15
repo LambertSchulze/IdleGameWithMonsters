@@ -8,8 +8,8 @@ import { useTypeDetailQuery } from '../../store/pokemonApi'
 
 export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
   const teamState = useAppSelector(state => state.teamState)
-  const teamDetailResponse = useMonDetailQuery(teamState[0].name)
-  const selectedMoveDetailResponse = useMoveDetailQuery(teamState[0].attack)
+  const teamDetailResponse = useMonDetailQuery(teamState[0].name ?? skipToken)
+  const selectedMoveDetailResponse = useMoveDetailQuery(teamState[0].attack ?? skipToken)
   const moveTypeDetailResponse = useTypeDetailQuery(
     selectedMoveDetailResponse.isSuccess ? selectedMoveDetailResponse.data.type : skipToken
   )
