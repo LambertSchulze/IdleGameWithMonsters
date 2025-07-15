@@ -10,29 +10,22 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
   const teamState = useAppSelector(state => state.teamState)
   const teamDetailResponse = useMonDetailQuery(teamState[0].name)
   const selectedMoveDetailResponse = useMoveDetailQuery(teamState[0].attack)
-  const firstTypeDetailResponse = useTypeDetailQuery(
-    teamDetailResponse.isSuccess ? teamDetailResponse.data.types[1] : skipToken
-  )
-  const secondTypeDetailResponse = useTypeDetailQuery(
-    teamDetailResponse.isSuccess && teamDetailResponse.data.types[2]
-      ? teamDetailResponse.data.types[2]
-      : skipToken
+  const moveTypeDetailResponse = useTypeDetailQuery(
+    selectedMoveDetailResponse.isSuccess ? selectedMoveDetailResponse.data.type : skipToken
   )
   let team = null
 
   if (
     teamDetailResponse.isSuccess &&
     selectedMoveDetailResponse.isSuccess &&
-    firstTypeDetailResponse.isSuccess &&
-    (teamDetailResponse.data.types[2] ? secondTypeDetailResponse.isSuccess : true)
+    moveTypeDetailResponse.isSuccess
   ) {
     team = {
       ...teamDetailResponse.data,
-      types: {
-        1: firstTypeDetailResponse.data,
-        2: secondTypeDetailResponse.data ?? null
-      },
-      attack: selectedMoveDetailResponse.data
+      attack: {
+        ...selectedMoveDetailResponse.data,
+        type: moveTypeDetailResponse.data
+      }
     }
   }
 

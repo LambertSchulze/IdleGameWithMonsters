@@ -16,7 +16,7 @@ That's when I thought _"Maybe you could make some little Pokémon Idle game"_
 ## Future Plans for this thing
 
 - [x] Get to minimum Tracer Bullet Stage
-- [ ] Damage is dealt the Pokémon way
+- [x] Damage is dealt the Pokémon way
 - [ ] Animations for attacking and taking damage
 - [x] After winning a battle the Pokémon on the next stage is one level up
 - [x] Winning a battle gives Experience points
