@@ -1,5 +1,5 @@
 import styles from './Battle.module.css'
-import { useReducer, useEffect } from 'react'
+import { useReducer, useEffect, useCallback } from 'react'
 import { useAppDispatch } from '../../store/store'
 import { addToDeck } from '../../store/deckSlice'
 import { addExp } from '../../store/gameSlice'
@@ -10,72 +10,73 @@ import { useEnemy } from '../Enemy/useEnemy'
 import { Team } from '../../components/Team/Team'
 import { Enemy } from '../../components/Enemy/Enemy'
 
-const States = {
+const State = {
   SETUP_BATTLE: 'SETUP_BATTLE',
   LOADING: 'LOADING',
   BATTLING: 'BATTLING',
   BATTLE_END: 'BATTLE_END'
 } as const
-export type BattleStateType = keyof typeof States
+export type BattleStateType = keyof typeof State
 
-const Actions = {
+const Action = {
   SETUP_NEW_BATTLE: 'SETUP_NEW_BATTLE',
   LOADING_FINISHED: 'LOADING_FINISHED',
   END_BATTLE: 'END_BATTLE'
 } as const
-type ActionType = keyof typeof Actions
+type ActionType = keyof typeof Action
 
 const reducer = (_: BattleStateType, action: ActionType) => {
   switch (action) {
-    case Actions.LOADING_FINISHED:
-      return States.BATTLING
-    case Actions.END_BATTLE:
-      return States.BATTLE_END
+    case Action.LOADING_FINISHED:
+      return State.BATTLING
+    case Action.END_BATTLE:
+      return State.BATTLE_END
     default:
-      return States.LOADING
+      return State.SETUP_BATTLE
   }
 }
 
 export const Battle = () => {
-  const [battleState, dispatchBattle] = useReducer(reducer, States.LOADING)
+  const [battleState, dispatchBattle] = useReducer(reducer, State.SETUP_BATTLE)
   const dispatch = useAppDispatch()
   const team = useTeam()
   const enemy = useEnemy()
   const { progressToNextStage } = useStage()
   const { damageCalculator } = useDamageCalculator()
 
+  const attackCallback = useCallback(
+    () => enemy?.addDamage(damageCalculator(team!, enemy)),
+    [enemy, team, damageCalculator]
+  )
+
   useEffect(() => {
-    if (battleState === States.LOADING && team && enemy) {
+    if (battleState === State.SETUP_BATTLE && team && enemy) {
       dispatch(addToDeck(enemy.name))
-      dispatchBattle(Actions.LOADING_FINISHED)
+
+      const interval = setInterval(() => {
+        dispatchBattle(Action.LOADING_FINISHED)
+      }, 1500)
+      return () => clearInterval(interval)
     }
-    if (battleState === States.BATTLE_END) {
-      dispatch(addExp((enemy!.baseExp * enemy!.level) / 7))
-      progressToNextStage()
+    if (battleState === State.BATTLE_END) {
+      const interval = setInterval(() => {
+        dispatch(addExp((enemy!.baseExp * enemy!.level) / 7))
+        progressToNextStage()
+      }, 1500)
+      return () => clearInterval(interval)
     }
   }, [battleState, team, enemy, dispatch, dispatchBattle, progressToNextStage])
 
   useEffect(() => {
     if (enemy?.isFainted) {
-      dispatchBattle(Actions.END_BATTLE)
+      dispatchBattle(Action.END_BATTLE)
     }
   }, [enemy])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (team && enemy && battleState === 'BATTLING') {
-        enemy.addDamage(damageCalculator(team, enemy))
-        return
-      }
-    }, 500)
-
-    return () => clearInterval(interval)
-  }, [team, enemy, damageCalculator, battleState])
-
   return (
     <div className={styles.container}>
-      {team && <Team {...team} />}
-      {battleState !== States.LOADING && enemy && <Enemy {...enemy} />}
+      {team && <Team {...team} battleState={battleState} attackCallback={attackCallback} />}
+      {enemy && <Enemy {...enemy} battleState={battleState} />}
     </div>
   )
 }
