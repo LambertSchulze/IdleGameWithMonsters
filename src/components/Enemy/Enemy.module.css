@@ -1,5 +1,49 @@
+@keyframes enter {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  1% {
+    opicity: 1;
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes exit {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+}
+
 .image {
   margin-inline: auto;
+
+  .component:global(.SETUP_BATTLE) & {
+    filter: brightness(0);
+    & :local {
+      animation: ease-out 1500ms forwards enter;
+    }
+  }
+
+  .component:global(.BATTLING) & {
+  }
+
+  .component:global(.BATTLE_END) & {
+    & :local {
+      animation: ease-in 150ms 1000ms forwards exit;
+    }
+  }
+}
+
+.level {
+  text-align: center;
 }
 
 .name {

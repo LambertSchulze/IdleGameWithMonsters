@@ -1,5 +1,6 @@
 import styles from './HealthBar.module.css'
 import type { FC } from 'react'
+import { toClassName } from '../../helpers/toClassNames'
 
 interface Props {
   health: number
@@ -9,7 +10,7 @@ interface Props {
 
 export const HealthBar: FC<Props> = ({ health, maxHp, className }) => {
   return (
-    <div className={`${styles.component} ${className ?? ''}`}>
+    <div className={toClassName(styles.component, className ?? '')}>
       {health}{' '}
       <meter
         id={`health_bar`}

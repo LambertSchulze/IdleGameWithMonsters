@@ -1,7 +1,28 @@
+@keyframes attack {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(15px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .image {
   margin-inline: auto;
+
+  &:global(.attack-animation) {
+    animation: linear 300ms attack;
+  }
 }
 
 .name {
   margin-block-start: 0;
+}
+
+.attackBar {
+  display: block;
+  margin-inline: auto;
 }
