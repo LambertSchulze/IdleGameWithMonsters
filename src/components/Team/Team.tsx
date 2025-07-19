@@ -1,5 +1,5 @@
 import styles from './Team.module.css'
-import { type FC, useState, useEffect } from 'react'
+import { type FC, useState, useCallback } from 'react'
 import type { MonDetailData } from '../../store/pokemonApi'
 import { toClassName } from '../../helpers/toClassNames'
 import { Image } from '../Image/Image'
@@ -11,30 +11,29 @@ interface Props extends Pick<MonDetailData, 'name' | 'sprites'> {
   attackCallback: () => void
 }
 
-export const Team: FC<Props> = props => {
-  const [triggerKey, setTriggerKey] = useState<number>(Date.now())
+export const Team: FC<Props> = ({ name, sprites, battleState, attackCallback }) => {
+  const [animate, setAnimate] = useState(false)
 
-  useEffect(() => {
-    if (props.battleState === 'BATTLING') {
-      const interval = setInterval(() => {
-        setTriggerKey(Date.now())
-      }, 3000)
-
-      return () => clearInterval(interval)
-    }
-  }, [props.battleState])
-
-  const handleComplete = () => {
-    console.log('Countdown complete!')
-    props.attackCallback()
-  }
+  const handleComplete = useCallback(() => {
+    attackCallback()
+    setAnimate(true)
+  }, [attackCallback])
 
   return (
-    <div className={toClassName(styles.component)}>
-      <Image back sprites={props.sprites} className={styles.image} />
-      <MonName name={props.name} className={styles.name} />
-      {props.battleState === 'BATTLING' && (
-        <CountdownBar durationInMS={3000} trigger={triggerKey} onComplete={handleComplete} />
+    <div>
+      <Image
+        back
+        sprites={sprites}
+        className={toClassName(styles.image, animate ? 'attack-animation' : '')}
+        onAnimationEnd={() => setAnimate(false)}
+      />
+      <MonName name={name} className={styles.name} />
+      {battleState === 'BATTLING' && (
+        <CountdownBar
+          durationInMS={3000}
+          onComplete={handleComplete}
+          className={styles.attackBar}
+        />
       )}
     </div>
   )

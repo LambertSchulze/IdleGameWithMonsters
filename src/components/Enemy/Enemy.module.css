@@ -37,9 +37,13 @@
 
   .component:global(.BATTLE_END) & {
     & :local {
-      animation: ease-in 1000ms forwards exit;
+      animation: ease-in 150ms 1000ms forwards exit;
     }
   }
+}
+
+.level {
+  text-align: center;
 }
 
 .name {

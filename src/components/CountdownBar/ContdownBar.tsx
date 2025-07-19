@@ -2,11 +2,11 @@ import { type FC, useState, useRef, useEffect } from 'react'
 
 interface Props {
   durationInMS: number
-  trigger: number
   onComplete: () => void
+  className?: string
 }
 
-export const CountdownBar: FC<Props> = ({ durationInMS, trigger, onComplete }) => {
+export const CountdownBar: FC<Props> = ({ durationInMS, onComplete, className }) => {
   const [value, setValue] = useState(100)
   const startRef = useRef<number | null>(null)
   const nextRef = useRef<number | null>(null)
@@ -32,11 +32,7 @@ export const CountdownBar: FC<Props> = ({ durationInMS, trigger, onComplete }) =
     nextRef.current = requestAnimationFrame(updateFrame)
 
     return () => cancelAnimationFrame(nextRef.current!)
-  }, [trigger, durationInMS, onComplete])
+  }, [durationInMS, onComplete])
 
-  return (
-    <meter min="0" max="100" value={value}>
-      Attack
-    </meter>
-  )
+  return <meter min="0" max="100" value={value} className={className} />
 }
