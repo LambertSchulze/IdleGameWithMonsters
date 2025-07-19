@@ -4,7 +4,7 @@
     opacity: 0;
   }
   1% {
-    opicity: 1;
+    opacity: 1;
   }
   100% {
     transform: translateX(0%);
