@@ -13,13 +13,13 @@ export interface Props extends Pick<MonDetailData, 'name' | 'stats' | 'sprites'>
   battleState: string
 }
 
-export const Enemy: FC<Props> = props => {
+export const Enemy: FC<Props> = ({ health, level, maxHp, battleState, sprites, name }) => {
   return (
-    <div className={toClassName(styles.component, props.battleState)}>
-      <Image front sprites={props.sprites} className={styles.image} />
-      {'Lvl ' + props.level}
-      <MonName name={props.name} className={styles.name} />
-      <HealthBar health={props.health} maxHp={props.maxHp} className={styles.healthbar} />
+    <div className={toClassName(styles.component, battleState)}>
+      <Image front sprites={sprites} className={styles.image} />
+      <MonName name={name} className={styles.name} />
+      <p className={styles.level}>{'Lvl ' + level}</p>
+      <HealthBar health={health} maxHp={maxHp} className={styles.healthbar} />
     </div>
   )
 }
