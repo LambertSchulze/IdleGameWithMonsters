@@ -7,14 +7,11 @@ export interface TeamMemberData {
 }
 
 export interface TeamState {
-  0: TeamMemberData
+  0: TeamMemberData | null
 }
 
 const initialState: TeamState = {
-  0: {
-    name: '' as MonName,
-    attack: '' as MoveName
-  }
+  0: null
 }
 
 export const teamSlice = createSlice({
