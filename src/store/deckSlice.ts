@@ -5,6 +5,7 @@ export interface DeckEntry {
   name: MonName
   spotted: number
   caught?: number
+  level?: number
 }
 
 export interface DeckState {
@@ -32,10 +33,23 @@ export const deckSlice = createSlice({
 
       state[monName] = {
         ...state[monName],
-        caught: new Date().valueOf()
+        caught: new Date().valueOf(),
+        level: 1
+      }
+    },
+    levelUp(state, mon: PayloadAction<MonName>) {
+      const monName = mon.payload
+
+      if (!state[monName].level) {
+        throw new Error("Can't level up an uncaptured Mon")
+      }
+
+      state[monName] = {
+        ...state[monName],
+        level: ++state[monName].level
       }
     }
   }
 })
 
-export const { addToDeck, captureMon } = deckSlice.actions
+export const { addToDeck, captureMon, levelUp } = deckSlice.actions

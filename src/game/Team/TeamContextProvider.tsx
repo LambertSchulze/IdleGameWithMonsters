@@ -11,8 +11,13 @@ import {
 import { getGrowthRate } from '../GrowthRate/getGrowthRate'
 
 export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
-  const teamState = useAppSelector(state => state.teamState)
   const [teamData, setTeamData] = useState<Team | null>(null)
+  const teamState = useAppSelector(state => state.teamState)
+  const teamLevel = useAppSelector(state => {
+    if (teamState[0]) {
+      return state.deckState[teamState[0].name].level
+    }
+  })
   const teamDetailResponse = useMonDetailQuery(teamState[0]?.name ?? skipToken)
   const selectedMoveDetailResponse = useMoveDetailQuery(teamState[0]?.attack ?? skipToken)
   const moveTypeDetailResponse = useTypeDetailQuery(
@@ -24,6 +29,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (
+      teamLevel &&
       teamDetailResponse.isSuccess &&
       selectedMoveDetailResponse.isSuccess &&
       moveTypeDetailResponse.isSuccess &&
@@ -31,6 +37,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
     ) {
       setTeamData({
         ...teamDetailResponse.data,
+        level: teamLevel,
         attack: {
           ...selectedMoveDetailResponse.data,
           type: moveTypeDetailResponse.data
@@ -40,6 +47,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [
     teamState,
+    teamLevel,
     teamDetailResponse,
     selectedMoveDetailResponse,
     moveTypeDetailResponse,

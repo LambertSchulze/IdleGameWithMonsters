@@ -13,13 +13,22 @@
 .image {
   margin-inline: auto;
 
-  &:global(.attack-animation) {
+  &:global(.attack_animation) {
     animation: linear 300ms attack;
   }
 }
 
 .name {
   margin-block-start: 0;
+}
+
+.level {
+  text-align: center;
+}
+
+.level_up_button {
+  margin-inline: 2ch;
+  background-color: limegreen;
 }
 
 .attackBar {
