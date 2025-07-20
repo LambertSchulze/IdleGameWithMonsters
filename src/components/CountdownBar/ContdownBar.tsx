@@ -34,5 +34,5 @@ export const CountdownBar: FC<Props> = ({ durationInMS, onComplete, className })
     return () => cancelAnimationFrame(nextRef.current!)
   }, [durationInMS, onComplete])
 
-  return <meter min="0" max="100" value={value} className={className} />
+  return <progress max="100" value={value} className={className} />
 }
