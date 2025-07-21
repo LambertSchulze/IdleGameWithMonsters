@@ -26,6 +26,7 @@ export const Team: FC<Props> = ({
   const [animate, setAnimate] = useState(false)
   const exp = useAppSelector(state => state.gameState.exp)
   const expForNextLevel = expAtLvl(level + 1)
+  const canLevelUp = exp >= expForNextLevel
 
   const handleCountdownComplete = useCallback(() => {
     attackCallback()
@@ -48,7 +49,7 @@ export const Team: FC<Props> = ({
       <MonName name={name} className={styles.name} />
       <p className={styles.level}>
         {'Lvl ' + level}
-        {expForNextLevel && exp >= expForNextLevel && (
+        {canLevelUp && (
           <button className={styles.level_up_button} onClick={handleLevelUp}>
             Level Up
           </button>
