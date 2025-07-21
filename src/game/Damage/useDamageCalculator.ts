@@ -23,12 +23,11 @@ const typeEffectiveness = (attackType: TypeDetailData, defenderType: TypeName | 
 }
 
 export function useDamageCalculator() {
-  const attackerLevel = 1
   const random = Math.floor(Math.random() * (255 - 217 + 1) + 217) / 255
 
   const damageCalculator = (attacker: Team, defender: Enemy) =>
     Math.round(
-      ((((2 * attackerLevel * critical) / 5 + 2) * attacker.attack.power * attacker.stats.attack) /
+      ((((2 * attacker.level * critical) / 5 + 2) * attacker.attack.power * attacker.stats.attack) /
         defender.stats.defense /
         50 +
         2) *

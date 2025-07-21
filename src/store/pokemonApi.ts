@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { GrowthRateName } from '../game/GrowthRate/getGrowthRate'
 
 export type MonName = string & { type: 'MonName' }
 
@@ -58,19 +59,24 @@ interface PokemonDetailApi {
       name: TypeName
     }
   }[]
+  species: {
+    name: MonName
+  }
+}
+
+export interface Stats {
+  hp: number
+  attack: number
+  defense: number
+  specialAttack: number
+  specialDefense: number
+  speed: number
 }
 
 export interface MonDetailData {
   name: MonName
   baseExp: number
-  stats: {
-    hp: number
-    attack: number
-    defense: number
-    specialAttack: number
-    specialDefense: number
-    speed: number
-  }
+  baseStats: Stats
   types: {
     1: TypeName
     2: TypeName | null
@@ -83,6 +89,7 @@ export interface MonDetailData {
     front: string
     back: string
   }
+  species: MonName
 }
 
 interface TypeDetailApi {
@@ -121,6 +128,16 @@ export interface MoveDetailData {
   damageClass: DamageClassName
 }
 
+interface SpeciesApi {
+  growth_rate: {
+    name: GrowthRateName
+  }
+}
+
+export interface SpeciesData {
+  growthRate: GrowthRateName
+}
+
 interface PokedexApi {
   id: number
   pokemon_entries: {
@@ -151,7 +168,7 @@ export const pokemonApi = createApi({
       transformResponse: (result: PokemonDetailApi) => ({
         name: result.name,
         baseExp: result.base_experience,
-        stats: {
+        baseStats: {
           hp: result.stats.find(s => s.stat.name === 'hp')!.base_stat,
           attack: result.stats.find(s => s.stat.name === 'attack')!.base_stat,
           defense: result.stats.find(s => s.stat.name === 'defense')!.base_stat,
@@ -180,7 +197,8 @@ export const pokemonApi = createApi({
         sprites: {
           front: result.sprites.front_default,
           back: result.sprites.back_default
-        }
+        },
+        species: result.species.name
       })
     }),
     typeDetail: build.query<TypeDetailData, TypeName>({
@@ -203,6 +221,12 @@ export const pokemonApi = createApi({
         damageClass: result.damage_class.name
       })
     }),
+    speciesDetail: build.query<SpeciesData, MonName>({
+      query: id => `pokemon-species/${id}`,
+      transformResponse: (result: SpeciesApi) => ({
+        growthRate: result.growth_rate.name as GrowthRateName
+      })
+    }),
     pokedex: build.query<PokedexData, number>({
       query: id => `pokedex/${id}`,
       transformResponse: (result: PokedexApi) => {
@@ -221,5 +245,10 @@ export const pokemonApi = createApi({
   })
 })
 
-export const { useMonDetailQuery, useTypeDetailQuery, useMoveDetailQuery, usePokedexQuery } =
-  pokemonApi
+export const {
+  useMonDetailQuery,
+  useTypeDetailQuery,
+  useMoveDetailQuery,
+  useSpeciesDetailQuery,
+  usePokedexQuery
+} = pokemonApi

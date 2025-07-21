@@ -1,6 +1,7 @@
 import { type FC, type PropsWithChildren, useEffect, useState } from 'react'
 import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
-import { EnemyContext } from './EnemyContext'
+import { type Enemy, EnemyContext } from './EnemyContext'
+import { getStats } from '../Stats/getStats'
 
 interface Props extends PropsWithChildren {
   monName: MonName
@@ -9,24 +10,27 @@ interface Props extends PropsWithChildren {
 
 export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
   const [damage, setDamage] = useState(0)
+  const [enemyData, setEnemyData] = useState<Enemy | null>(null)
   const { data, isSuccess } = useMonDetailQuery(monName)
-  const maxHp = (baseHp: number) => Math.floor((baseHp * 2 * level) / 100 + level + 10)
-  let enemy = null
 
-  if (isSuccess) {
-    enemy = {
-      ...data,
-      level,
-      maxHp: maxHp(data.stats.hp),
-      health: Math.max(maxHp(data.stats.hp) - damage, 0),
-      isFainted: damage >= maxHp(data.stats.hp),
-      addDamage: (attack: number) => setDamage(damage => damage + attack)
+  useEffect(() => {
+    if (isSuccess) {
+      const stats = getStats(data.baseStats, level)
+
+      setEnemyData({
+        ...data,
+        level,
+        stats: stats,
+        health: Math.max(stats.hp - damage, 0),
+        isFainted: damage >= stats.hp,
+        addDamage: (attack: number) => setDamage(damage => damage + attack)
+      })
     }
-  }
+  }, [isSuccess, damage, data, level])
 
   useEffect(() => {
     setDamage(0)
   }, [monName])
 
-  return <EnemyContext.Provider value={enemy}>{children}</EnemyContext.Provider>
+  return <EnemyContext.Provider value={enemyData}>{children}</EnemyContext.Provider>
 }

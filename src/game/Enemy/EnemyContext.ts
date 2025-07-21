@@ -1,9 +1,9 @@
 import { createContext } from 'react'
-import type { MonDetailData } from '../../store/pokemonApi'
+import type { MonDetailData, Stats } from '../../store/pokemonApi'
 
 export interface Enemy extends MonDetailData {
   level: number
-  maxHp: number
+  stats: Stats
   health: number
   isFainted: boolean
   addDamage: (attack: number) => void
