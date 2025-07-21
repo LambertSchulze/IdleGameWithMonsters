@@ -9,7 +9,7 @@ import { CountdownBar } from '../CountdownBar/ContdownBar'
 import { reduceExp } from '../../store/gameSlice'
 import { levelUp } from '../../store/deckSlice'
 
-interface Props extends Pick<TeamType, 'name' | 'level' | 'sprites' | 'expAtLvl'> {
+interface Props extends Pick<TeamType, 'name' | 'level' | 'stats' | 'sprites' | 'expAtLvl'> {
   battleState: string
   attackCallback: () => void
 }
@@ -17,6 +17,7 @@ interface Props extends Pick<TeamType, 'name' | 'level' | 'sprites' | 'expAtLvl'
 export const Team: FC<Props> = ({
   name,
   level,
+  stats,
   sprites,
   expAtLvl,
   battleState,
@@ -57,7 +58,7 @@ export const Team: FC<Props> = ({
       </p>
       {battleState === 'BATTLING' && (
         <CountdownBar
-          durationInMS={3000}
+          durationInMS={3000 - stats.speed * 100}
           onComplete={handleCountdownComplete}
           className={styles.attackBar}
         />

@@ -9,6 +9,7 @@ import {
   useSpeciesDetailQuery
 } from '../../store/pokemonApi'
 import { getGrowthRate } from '../GrowthRate/getGrowthRate'
+import { getStats } from '../Stats/getStats'
 
 export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
   const [teamData, setTeamData] = useState<Team | null>(null)
@@ -38,6 +39,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
       setTeamData({
         ...teamDetailResponse.data,
         level: teamLevel,
+        stats: getStats(teamDetailResponse.data.baseStats, teamLevel),
         attack: {
           ...selectedMoveDetailResponse.data,
           type: moveTypeDetailResponse.data

@@ -64,17 +64,19 @@ interface PokemonDetailApi {
   }
 }
 
+export interface Stats {
+  hp: number
+  attack: number
+  defense: number
+  specialAttack: number
+  specialDefense: number
+  speed: number
+}
+
 export interface MonDetailData {
   name: MonName
   baseExp: number
-  stats: {
-    hp: number
-    attack: number
-    defense: number
-    specialAttack: number
-    specialDefense: number
-    speed: number
-  }
+  baseStats: Stats
   types: {
     1: TypeName
     2: TypeName | null
@@ -166,7 +168,7 @@ export const pokemonApi = createApi({
       transformResponse: (result: PokemonDetailApi) => ({
         name: result.name,
         baseExp: result.base_experience,
-        stats: {
+        baseStats: {
           hp: result.stats.find(s => s.stat.name === 'hp')!.base_stat,
           attack: result.stats.find(s => s.stat.name === 'attack')!.base_stat,
           defense: result.stats.find(s => s.stat.name === 'defense')!.base_stat,
