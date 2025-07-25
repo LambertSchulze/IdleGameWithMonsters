@@ -9,7 +9,7 @@ import { CountdownBar } from '../CountdownBar/ContdownBar'
 import { reduceExp } from '../../store/gameSlice'
 import { levelUp } from '../../store/deckSlice'
 
-interface Props extends Pick<TeamType, 'name' | 'level' | 'stats' | 'sprites' | 'expAtLvl'> {
+interface Props extends Pick<TeamType, 'name' | 'level' | 'stats' | 'sprites' | 'expForNextLvl'> {
   battleState: string
   attackCallback: () => void
 }
@@ -19,15 +19,14 @@ export const Team: FC<Props> = ({
   level,
   stats,
   sprites,
-  expAtLvl,
+  expForNextLvl,
   battleState,
   attackCallback
 }) => {
   const dispatch = useAppDispatch()
   const [animate, setAnimate] = useState(false)
   const exp = useAppSelector(state => state.gameState.exp)
-  const expForNextLevel = expAtLvl(level + 1)
-  const canLevelUp = exp >= expForNextLevel
+  const canLevelUp = exp >= expForNextLvl
 
   const handleCountdownComplete = useCallback(() => {
     attackCallback()
@@ -35,7 +34,7 @@ export const Team: FC<Props> = ({
   }, [attackCallback])
 
   const handleLevelUp = () => {
-    dispatch(reduceExp(expForNextLevel))
+    dispatch(reduceExp(expForNextLvl))
     dispatch(levelUp(name))
   }
 
@@ -55,10 +54,12 @@ export const Team: FC<Props> = ({
             Level Up
           </button>
         )}
+        <br />
+        <progress id={'expBar'} max={expForNextLvl} value={exp} />
       </p>
       {battleState === 'BATTLING' && (
         <CountdownBar
-          durationInMS={3000 - stats.speed * 100}
+          durationInMS={Math.max(3000 - stats.speed * 100, 100)}
           onComplete={handleCountdownComplete}
           className={styles.attackBar}
         />

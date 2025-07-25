@@ -7,7 +7,7 @@ export interface Team extends MonDetailData {
   attack: Omit<MoveDetailData, 'type'> & {
     type: TypeDetailData
   }
-  expAtLvl: (x: number) => number
+  expForNextLvl: number
 }
 
 export const TeamContext = createContext<Team | null>(null)

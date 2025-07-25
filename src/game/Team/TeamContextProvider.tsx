@@ -36,6 +36,8 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
       moveTypeDetailResponse.isSuccess &&
       speciesDetailResponse.isSuccess
     ) {
+      const growthRate = getGrowthRate(speciesDetailResponse.data.growthRate)
+
       setTeamData({
         ...teamDetailResponse.data,
         level: teamLevel,
@@ -44,7 +46,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
           ...selectedMoveDetailResponse.data,
           type: moveTypeDetailResponse.data
         },
-        expAtLvl: getGrowthRate(speciesDetailResponse.data.growthRate)
+        expForNextLvl: growthRate(teamLevel + 1) - growthRate(teamLevel)
       })
     }
   }, [
