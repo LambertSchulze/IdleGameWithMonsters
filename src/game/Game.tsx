@@ -1,5 +1,5 @@
 import { useAppSelector } from '../store/store'
-import { Battle } from './Battle/Battle'
+import { BattleArena } from '../components/BattleArena/BattleArena'
 import { StageProvider } from './Stage/StageContextProvider'
 import { TeamProvider } from './Team/TeamContextProvider'
 
@@ -9,7 +9,7 @@ export const Game = () => {
   return (
     <TeamProvider>
       <StageProvider id={stageId}>
-        <Battle key={stageId} />
+        <BattleArena key={stageId} />
       </StageProvider>
     </TeamProvider>
   )

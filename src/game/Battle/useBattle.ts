@@ -1,4 +1,3 @@
-import styles from './Battle.module.css'
 import { useReducer, useEffect, useCallback } from 'react'
 import { useAppDispatch } from '../../store/store'
 import { addToDeck } from '../../store/deckSlice'
@@ -7,8 +6,6 @@ import { useStage } from '../Stage/useStage'
 import { useDamageCalculator } from '../Damage/useDamageCalculator'
 import { useTeam } from '../Team/useTeam'
 import { useEnemy } from '../Enemy/useEnemy'
-import { Team } from '../../components/Team/Team'
-import { Enemy } from '../../components/Enemy/Enemy'
 
 const State = {
   SETUP_BATTLE: 'SETUP_BATTLE',
@@ -36,7 +33,7 @@ const reducer = (_: BattleStateType, action: ActionType) => {
   }
 }
 
-export const Battle = () => {
+export const useBattle = () => {
   const [battleState, dispatchBattle] = useReducer(reducer, State.SETUP_BATTLE)
   const dispatch = useAppDispatch()
   const team = useTeam()
@@ -73,10 +70,10 @@ export const Battle = () => {
     }
   }, [enemy])
 
-  return (
-    <div className={styles.container}>
-      {team && <Team {...team} battleState={battleState} attackCallback={attackCallback} />}
-      {enemy && <Enemy {...enemy} battleState={battleState} />}
-    </div>
-  )
+  return {
+    team,
+    enemy,
+    battleState,
+    attackCallback
+  }
 }
