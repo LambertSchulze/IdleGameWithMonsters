@@ -157,6 +157,29 @@ export interface PokedexData {
   [key: MonName]: PokedexEntry
 }
 
+interface LocationAreaApi {
+  name: string
+  pokemon_encounters: {
+    pokemon: {
+      name: MonName
+    }
+    version_details: {
+      max_chance: number
+      version: {
+        name: string
+      }
+    }[]
+  }[]
+}
+
+export interface LocationData {
+  name: string
+  encounters: {
+    name: MonName
+    chance: number
+  }[]
+}
+
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({
@@ -241,6 +264,21 @@ export const pokemonApi = createApi({
 
         return pokedex
       }
+    }),
+    location: build.query<LocationData, string>({
+      query: id => `location-area/${id}`,
+      transformResponse: (result: LocationAreaApi) => ({
+        name: result.name,
+        encounters: result.pokemon_encounters
+          .filter(encounter =>
+            encounter.version_details.find(version => version.version.name === 'red')
+          )
+          .map(encounter => ({
+            name: encounter.pokemon.name,
+            chance: encounter.version_details.find(version => version.version.name === 'red')!
+              .max_chance
+          }))
+      })
     })
   })
 })
@@ -250,5 +288,6 @@ export const {
   useTypeDetailQuery,
   useMoveDetailQuery,
   useSpeciesDetailQuery,
-  usePokedexQuery
+  usePokedexQuery,
+  useLocationQuery
 } = pokemonApi
