@@ -22,6 +22,33 @@
   }
 }
 
+@keyframes catching {
+  0% {
+    transform: rotate(0);
+  }
+  5% {
+    transform: rotate(20deg);
+  }
+  10% {
+    transform: rotate(-20deg);
+  }
+  15% {
+    transform: rotate(0);
+  }
+  60% {
+    transform: rotate(0);
+  }
+  65% {
+    transform: rotate(20deg);
+  }
+  70% {
+    transform: rotate(-20deg);
+  }
+  75% {
+    transform: rotate(0);
+  }
+}
+
 .image {
   margin-inline: auto;
 
@@ -33,6 +60,15 @@
   }
 
   .component:global(.BATTLING) & {
+  }
+
+  .component:global(.CATCHING) & {
+    filter: hue-rotate(180deg);
+    clip-path: circle(15%);
+
+    & :local {
+      animation: 3000ms catching;
+    }
   }
 
   .component:global(.BATTLE_END) & {

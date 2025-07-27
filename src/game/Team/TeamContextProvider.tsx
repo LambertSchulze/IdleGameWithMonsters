@@ -14,7 +14,7 @@ import { getStats } from '../Stats/getStats'
 export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
   const [teamData, setTeamData] = useState<Team | null>(null)
   const teamState = useAppSelector(state => state.teamState)
-  const teamLevel = useAppSelector(state => {
+  const level = useAppSelector(state => {
     if (teamState[0]) {
       return state.deckState[teamState[0].name].level
     }
@@ -30,7 +30,7 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (
-      teamLevel &&
+      level &&
       teamDetailResponse.isSuccess &&
       selectedMoveDetailResponse.isSuccess &&
       moveTypeDetailResponse.isSuccess &&
@@ -40,18 +40,18 @@ export const TeamProvider: FC<PropsWithChildren> = ({ children }) => {
 
       setTeamData({
         ...teamDetailResponse.data,
-        level: teamLevel,
-        stats: getStats(teamDetailResponse.data.baseStats, teamLevel),
+        level,
+        stats: getStats(teamDetailResponse.data.baseStats, level),
         attack: {
           ...selectedMoveDetailResponse.data,
           type: moveTypeDetailResponse.data
         },
-        expForNextLvl: growthRate(teamLevel + 1) - growthRate(teamLevel)
+        expForNextLvl: growthRate(level + 1) - growthRate(level)
       })
     }
   }, [
     teamState,
-    teamLevel,
+    level,
     teamDetailResponse,
     selectedMoveDetailResponse,
     moveTypeDetailResponse,

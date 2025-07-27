@@ -7,6 +7,7 @@ export interface Enemy extends MonDetailData {
   health: number
   isFainted: boolean
   addDamage: (attack: number) => void
+  isCaught: boolean
 }
 
 export const EnemyContext = createContext<Enemy | null>(null)

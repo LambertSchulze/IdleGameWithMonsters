@@ -28,7 +28,7 @@ export const deckSlice = createSlice({
         }
       }
     },
-    captureMon(state, mon: PayloadAction<MonName>) {
+    catchMon(state, mon: PayloadAction<MonName>) {
       const monName = mon.payload
 
       state[monName] = {
@@ -52,4 +52,4 @@ export const deckSlice = createSlice({
   }
 })
 
-export const { addToDeck, captureMon, levelUp } = deckSlice.actions
+export const { addToDeck, catchMon, levelUp } = deckSlice.actions

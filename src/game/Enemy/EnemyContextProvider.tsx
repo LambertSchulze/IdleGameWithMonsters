@@ -2,6 +2,7 @@ import { type FC, type PropsWithChildren, useEffect, useState } from 'react'
 import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
 import { type Enemy, EnemyContext } from './EnemyContext'
 import { getStats } from '../Stats/getStats'
+import { useAppSelector } from '../../store/store'
 
 interface Props extends PropsWithChildren {
   monName: MonName
@@ -12,6 +13,7 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
   const [damage, setDamage] = useState(0)
   const [enemyData, setEnemyData] = useState<Enemy | null>(null)
   const { data, isSuccess } = useMonDetailQuery(monName)
+  const isCaught = Boolean(useAppSelector(store => store.deckState[monName]?.caught))
 
   useEffect(() => {
     if (isSuccess) {
@@ -20,13 +22,14 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
       setEnemyData({
         ...data,
         level,
-        stats: stats,
+        stats,
         health: Math.max(stats.hp - damage, 0),
         isFainted: damage >= stats.hp,
-        addDamage: (attack: number) => setDamage(damage => damage + attack)
+        addDamage: (attack: number) => setDamage(damage => damage + attack),
+        isCaught
       })
     }
-  }, [isSuccess, damage, data, level])
+  }, [isSuccess, damage, data, level, isCaught])
 
   useEffect(() => {
     setDamage(0)
