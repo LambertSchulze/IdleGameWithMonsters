@@ -12,7 +12,7 @@ interface Props extends PropsWithChildren {
 
 export const StageProvider: FC<Props> = ({ id, children }) => {
   const dispatch = useAppDispatch()
-  const encounter = useEncounter()
+  const encounter = useEncounter(id)
 
   const progressToNextStage = () => {
     dispatch(incrementStageId())
