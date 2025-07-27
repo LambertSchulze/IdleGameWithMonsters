@@ -10,9 +10,6 @@ export const StatsDashboard = () => {
       <dl>
         <dt>Starters:</dt>
         <dd>{runState.starterMons.join(' or ')}</dd>
-
-        <dt>Enemies:</dt>
-        <dd>{runState.encounters.join(' or ')}</dd>
       </dl>
     </dialog>
   )

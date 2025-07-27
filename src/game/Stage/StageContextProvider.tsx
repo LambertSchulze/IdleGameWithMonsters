@@ -12,7 +12,7 @@ interface Props extends PropsWithChildren {
 
 export const StageProvider: FC<Props> = ({ id, children }) => {
   const dispatch = useAppDispatch()
-  const encounter = useEncounter()
+  const encounter = useEncounter(id)
 
   const progressToNextStage = () => {
     dispatch(incrementStageId())
@@ -29,9 +29,11 @@ export const StageProvider: FC<Props> = ({ id, children }) => {
       {id === 0 ? (
         <StarterSelector />
       ) : (
-        <EnemyProvider monName={encounter} level={id} key={id}>
-          {children}
-        </EnemyProvider>
+        encounter && (
+          <EnemyProvider monName={encounter} level={id} key={id}>
+            {children}
+          </EnemyProvider>
+        )
       )}
     </StageContext.Provider>
   )

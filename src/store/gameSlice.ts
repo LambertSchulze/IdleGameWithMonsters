@@ -5,14 +5,12 @@ export interface GameState {
   exp: number
   stageId: number
   starterMons: MonName[]
-  encounters: MonName[]
 }
 
 const initialState: GameState = {
   exp: 0,
   stageId: 0,
-  starterMons: ['bulbasaur', 'charmander', 'squirtle'] as MonName[],
-  encounters: ['rattata', 'pidgey', 'caterpie', 'weedle', 'spearow'] as MonName[]
+  starterMons: ['bulbasaur', 'charmander', 'squirtle'] as MonName[]
 }
 
 export const gameSlice = createSlice({
