@@ -1,0 +1,8 @@
+.component {
+  width: fit-content;
+}
+
+.level_up_button {
+  margin-inline: 2ch;
+  background-color: limegreen;
+}

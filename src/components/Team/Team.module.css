@@ -22,13 +22,8 @@
   margin-block-start: 0;
 }
 
-.level {
-  text-align: center;
-}
-
-.level_up_button {
-  margin-inline: 2ch;
-  background-color: limegreen;
+.levelBar {
+  margin-inline: auto;
 }
 
 .attackBar {

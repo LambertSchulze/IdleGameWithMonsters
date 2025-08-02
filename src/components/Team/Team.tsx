@@ -5,7 +5,8 @@ import { toClassName } from '../../helpers/toClassNames'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { Image } from '../Image/Image'
 import { MonName } from '../MonName/MonName'
-import { CountdownBar } from '../CountdownBar/ContdownBar'
+import { LevelBar } from '../LevelBar/LevelBar'
+import { CountdownBar } from '../CountdownBar/CountdownBar'
 import { reduceExp } from '../../store/gameSlice'
 import { levelUp } from '../../store/deckSlice'
 
@@ -47,16 +48,14 @@ export const Team: FC<Props> = ({
         onAnimationEnd={() => setAnimate(false)}
       />
       <MonName name={name} className={styles.name} />
-      <p className={styles.level}>
-        {'Lvl ' + level}
-        {canLevelUp && (
-          <button className={styles.level_up_button} onClick={handleLevelUp}>
-            Level Up
-          </button>
-        )}
-        <br />
-        <progress id={'expBar'} max={expForNextLvl} value={exp} />
-      </p>
+      <LevelBar
+        level={level}
+        canLevelUp={canLevelUp}
+        exp={exp}
+        expForNextLvl={expForNextLvl}
+        handleLevelUp={handleLevelUp}
+        className={styles.levelBar}
+      />
       {battleState === 'BATTLING' && (
         <CountdownBar
           durationInMS={Math.max(3000 - stats.speed * 100, 100)}
