@@ -5,7 +5,11 @@
 }
 
 .spotted {
-  img {
+  &:not(.caught) img {
     filter: grayscale(1);
   }
+}
+
+.inTeam {
+  background-color: green;
 }

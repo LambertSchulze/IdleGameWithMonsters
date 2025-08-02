@@ -9,7 +9,7 @@ export const Game = () => {
   return (
     <TeamProvider>
       <StageProvider id={stageId}>
-        <BattleArena key={stageId} />
+        <BattleArena />
       </StageProvider>
     </TeamProvider>
   )

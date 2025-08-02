@@ -6,6 +6,7 @@ export interface DeckEntry {
   spotted: number
   caught?: number
   level?: number
+  inTeam?: boolean
 }
 
 export interface DeckState {
@@ -48,8 +49,28 @@ export const deckSlice = createSlice({
         ...state[monName],
         level: ++state[monName].level
       }
+    },
+    addToTeam(state, mon: PayloadAction<MonName>) {
+      const monName = mon.payload
+
+      state[monName] = {
+        ...state[monName],
+        inTeam: true
+      }
+    },
+    removeFromTeam(state, mon: PayloadAction<MonName>) {
+      const monName = mon.payload
+
+      state[monName] = {
+        ...state[monName],
+        inTeam: false
+      }
     }
+  },
+  selectors: {
+    teamMembers: (state): DeckEntry[] => Object.values(state).filter(entry => entry.inTeam)
   }
 })
 
-export const { addToDeck, catchMon, levelUp } = deckSlice.actions
+export const { addToDeck, catchMon, levelUp, addToTeam, removeFromTeam } = deckSlice.actions
+export const { teamMembers } = deckSlice.selectors
