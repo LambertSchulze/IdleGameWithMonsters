@@ -1,11 +1,12 @@
 import styles from './BattleArena.module.css'
 import { useBattle } from '../../game/Battle/useBattle'
+import { useTeam } from '../../game/Team/useTeam'
 import { Team } from '../Team/Team'
 import { Enemy } from '../Enemy/Enemy'
 
 export const BattleArena = () => {
-  const { team, enemy, battleState, attackCallback, caught, isCatchable, catchCallback } =
-    useBattle()
+  const { enemy, battleState, attackCallback, caught, isCatchable, catchCallback } = useBattle()
+  const team = useTeam()
 
   return (
     <div className={styles.container}>

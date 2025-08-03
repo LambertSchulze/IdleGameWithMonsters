@@ -5,12 +5,8 @@ import type { TypeDetailData, TypeName } from '../../store/pokemonApi'
 // Simplified crit chanche: D50 roll
 const critical = Math.floor(Math.random() * 50) + 1 === 50 ? 2 : 1
 
-const sameTypeAttackBonus = (attacker: Team) => {
-  if (
-    attacker.attack.type.name === attacker.types[1] ||
-    attacker.attack.type.name === attacker.types[2]
-  )
-    return 1.5
+const sameTypeAttackBonus = (attackType: TypeName, attackerTypes: Team['types']) => {
+  if (attackType === attackerTypes[1] || attackType === attackerTypes[2]) return 1.5
   else return 1
 }
 
@@ -25,13 +21,16 @@ const typeEffectiveness = (attackType: TypeDetailData, defenderType: TypeName | 
 export function useDamageCalculator() {
   const random = Math.floor(Math.random() * (255 - 217 + 1) + 217) / 255
 
-  const damageCalculator = (attacker: Team, defender: Enemy) =>
+  const damageCalculator = (
+    attacker: Pick<Team, 'level' | 'stats' | 'attack' | 'types'>,
+    defender: Enemy
+  ) =>
     Math.round(
       ((((2 * attacker.level * critical) / 5 + 2) * attacker.attack.power * attacker.stats.attack) /
         defender.stats.defense /
         50 +
         2) *
-        sameTypeAttackBonus(attacker) *
+        sameTypeAttackBonus(attacker.attack.type.name, attacker.types) *
         typeEffectiveness(attacker.attack.type, defender.types[1]) *
         typeEffectiveness(attacker.attack.type, defender.types[2]) *
         random

@@ -10,16 +10,22 @@ import { CountdownBar } from '../CountdownBar/CountdownBar'
 import { reduceExp } from '../../store/gameSlice'
 import { levelUp } from '../../store/deckSlice'
 
-interface Props extends Pick<TeamType, 'name' | 'level' | 'stats' | 'sprites' | 'expForNextLvl'> {
+interface Props
+  extends Pick<
+    TeamType,
+    'name' | 'level' | 'stats' | 'types' | 'sprites' | 'attack' | 'expForNextLvl'
+  > {
   battleState: string
-  attackCallback: () => void
+  attackCallback: (team: Pick<TeamType, 'level' | 'stats' | 'attack' | 'types'>) => void
 }
 
 export const Team: FC<Props> = ({
   name,
   level,
   stats,
+  types,
   sprites,
+  attack,
   expForNextLvl,
   battleState,
   attackCallback
@@ -30,9 +36,14 @@ export const Team: FC<Props> = ({
   const canLevelUp = exp >= expForNextLvl
 
   const handleCountdownComplete = useCallback(() => {
-    attackCallback()
+    attackCallback({
+      level,
+      stats,
+      attack,
+      types
+    })
     setAnimate(true)
-  }, [attackCallback])
+  }, [attackCallback, level, stats, attack, types])
 
   const handleLevelUp = () => {
     dispatch(reduceExp(expForNextLvl))

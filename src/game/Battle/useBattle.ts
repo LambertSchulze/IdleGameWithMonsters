@@ -1,10 +1,10 @@
 import { useReducer, useEffect, useCallback } from 'react'
+import type { Team } from '../Team/TeamContext'
 import { useAppDispatch } from '../../store/store'
 import { addToDeck, catchMon } from '../../store/deckSlice'
 import { addExp } from '../../store/gameSlice'
 import { useStage } from '../Stage/useStage'
 import { useDamageCalculator } from '../Damage/useDamageCalculator'
-import { useTeam } from '../Team/useTeam'
 import { useEnemy } from '../Enemy/useEnemy'
 
 const State = {
@@ -40,14 +40,14 @@ const reducer = (_: BattleStateType, action: ActionType) => {
 export const useBattle = () => {
   const [battleState, dispatchBattle] = useReducer(reducer, State.SETUP_BATTLE)
   const dispatch = useAppDispatch()
-  const team = useTeam()
   const enemy = useEnemy()
   const { progressToNextStage } = useStage()
   const { damageCalculator } = useDamageCalculator()
 
   const attackCallback = useCallback(
-    () => enemy?.addDamage(damageCalculator(team!, enemy)),
-    [enemy, team, damageCalculator]
+    (team: Pick<Team, 'level' | 'stats' | 'attack' | 'types'>) =>
+      enemy?.addDamage(damageCalculator(team, enemy)),
+    [enemy, damageCalculator]
   )
 
   const isCatchable =
@@ -58,7 +58,7 @@ export const useBattle = () => {
   }
 
   useEffect(() => {
-    if (battleState === State.SETUP_BATTLE && team && enemy) {
+    if (battleState === State.SETUP_BATTLE && enemy) {
       dispatch(addToDeck(enemy.name))
 
       const interval = setInterval(() => {
@@ -82,7 +82,7 @@ export const useBattle = () => {
       }, 1500)
       return () => clearInterval(interval)
     }
-  }, [battleState, team, enemy, dispatch, dispatchBattle, progressToNextStage])
+  }, [battleState, enemy, dispatch, dispatchBattle, progressToNextStage])
 
   useEffect(() => {
     if (enemy?.isFainted) {
@@ -91,7 +91,6 @@ export const useBattle = () => {
   }, [enemy])
 
   return {
-    team,
     enemy,
     battleState,
     isCatchable,
