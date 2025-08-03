@@ -40,7 +40,7 @@ export const Team: FC<Props> = ({
   }
 
   return (
-    <div>
+    <div className={styles.component}>
       <Image
         back
         sprites={sprites}

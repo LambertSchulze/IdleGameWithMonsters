@@ -10,6 +10,10 @@
   }
 }
 
+.component {
+  grid-area: Team;
+}
+
 .image {
   margin-inline: auto;
 
