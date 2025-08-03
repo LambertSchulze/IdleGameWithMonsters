@@ -19,9 +19,9 @@ export const Entry: FC<Props> = ({ name, spotted, caught }) => {
   return (
     <div
       className={toClassName(
-        caught ? styles.caught : '',
-        spotted ? styles.spotted : '',
-        inTeam ? styles.inTeam : ''
+        caught && styles.caught,
+        spotted && styles.spotted,
+        inTeam && styles.inTeam
       )}
     >
       <Image front sprites={data?.sprites} />

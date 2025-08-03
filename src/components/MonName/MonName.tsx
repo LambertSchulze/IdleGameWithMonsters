@@ -12,7 +12,7 @@ interface Props {
 
 export const MonName: FC<Props> = ({ name, smaller, caught, className }) => {
   return (
-    <p className={toClassName(style.component, smaller ? 'smaller' : '', className ?? '')}>
+    <p className={toClassName(style.component, smaller && 'smaller', className)}>
       {name ?? '???'}
       {caught && (
         <svg height={'1lh'} width={'1lh'} viewBox="0 0 100 100" className={style.caught}>

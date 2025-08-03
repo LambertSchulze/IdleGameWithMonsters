@@ -44,7 +44,7 @@ export const Team: FC<Props> = ({
       <Image
         back
         sprites={sprites}
-        className={toClassName(styles.image, animate ? 'attack_animation' : '')}
+        className={toClassName(styles.image, animate && 'attack_animation')}
         onAnimationEnd={() => setAnimate(false)}
       />
       <MonName name={name} className={styles.name} />

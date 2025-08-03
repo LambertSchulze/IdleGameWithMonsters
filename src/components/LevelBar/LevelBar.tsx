@@ -20,7 +20,7 @@ export const LevelBar: FC<Props> = ({
   className
 }) => {
   return (
-    <div className={toClassName(styles.component, className ?? '')}>
+    <div className={toClassName(styles.component, className)}>
       {'Lvl ' + level}
       {canLevelUp && (
         <button className={styles.level_up_button} onClick={handleLevelUp}>

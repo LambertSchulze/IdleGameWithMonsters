@@ -1,3 +1,3 @@
-export const toClassName = (...args: string[]): string => {
-  return args.join(' ')
+export const toClassName = (...args: (string | number | boolean | undefined)[]): string => {
+  return args.filter(Boolean).join(' ')
 }
