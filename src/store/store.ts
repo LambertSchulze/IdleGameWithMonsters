@@ -2,14 +2,12 @@ import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux
 import { configureStore } from '@reduxjs/toolkit'
 import { pokemonApi } from './pokemonApi'
 import { gameSlice } from './gameSlice'
-import { teamSlice } from './teamSlice'
 import { deckSlice } from './deckSlice'
 
 export const store = configureStore({
   reducer: {
     [pokemonApi.reducerPath]: pokemonApi.reducer,
     [gameSlice.name]: gameSlice.reducer,
-    [teamSlice.name]: teamSlice.reducer,
     [deckSlice.name]: deckSlice.reducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(pokemonApi.middleware)

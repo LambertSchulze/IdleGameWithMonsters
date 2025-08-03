@@ -1,13 +1,31 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type MonName } from './pokemonApi'
 
-export interface DeckEntry {
+type SpottedMon = {
   name: MonName
+  status: 'spotted'
   spotted: number
-  caught?: number
-  level?: number
-  inTeam?: boolean
 }
+
+type CaughtMon = {
+  name: MonName
+  status: 'caught'
+  spotted: number
+  caught: number
+  level: number
+  inTeam?: false
+}
+
+type TeamMon = {
+  name: MonName
+  status: 'caught'
+  spotted: number
+  caught: number
+  level: number
+  inTeam: true
+}
+
+export type DeckEntry = SpottedMon | CaughtMon | TeamMon
 
 export interface DeckState {
   [key: MonName]: DeckEntry
@@ -25,6 +43,7 @@ export const deckSlice = createSlice({
       if (!state[monName]) {
         state[monName] = {
           name: monName,
+          status: 'spotted',
           spotted: new Date().valueOf()
         }
       }
@@ -34,6 +53,7 @@ export const deckSlice = createSlice({
 
       state[monName] = {
         ...state[monName],
+        status: 'caught',
         caught: new Date().valueOf(),
         level: 1
       }
@@ -41,8 +61,8 @@ export const deckSlice = createSlice({
     levelUp(state, mon: PayloadAction<MonName>) {
       const monName = mon.payload
 
-      if (!state[monName].level) {
-        throw new Error("Can't level up an uncaptured Mon")
+      if (state[monName].status !== 'caught') {
+        throw new Error("Can't level up an uncaught Mon")
       }
 
       state[monName] = {
@@ -52,6 +72,10 @@ export const deckSlice = createSlice({
     },
     addToTeam(state, mon: PayloadAction<MonName>) {
       const monName = mon.payload
+
+      if (state[monName].status !== 'caught') {
+        throw new Error("Can't add uncaught Mon to team")
+      }
 
       state[monName] = {
         ...state[monName],
@@ -68,7 +92,8 @@ export const deckSlice = createSlice({
     }
   },
   selectors: {
-    teamMembers: (state): DeckEntry[] => Object.values(state).filter(entry => entry.inTeam)
+    teamMembers: (state): TeamMon[] =>
+      Object.values(state).filter((entry: DeckEntry) => entry.status === 'caught' && entry.inTeam)
   }
 })
 

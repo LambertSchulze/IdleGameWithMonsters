@@ -1,11 +1,11 @@
 import { useReducer, useEffect, useCallback } from 'react'
-import type { Team } from '../Team/TeamContext'
 import { useAppDispatch } from '../../store/store'
 import { addToDeck, catchMon } from '../../store/deckSlice'
 import { addExp } from '../../store/gameSlice'
 import { useStage } from '../Stage/useStage'
 import { useDamageCalculator } from '../Damage/useDamageCalculator'
 import { useEnemy } from '../Enemy/useEnemy'
+import { type MonTypes, type Stats, type TypeDetailData } from '../../store/pokemonApi'
 
 const State = {
   SETUP_BATTLE: 'SETUP_BATTLE',
@@ -45,8 +45,18 @@ export const useBattle = () => {
   const { damageCalculator } = useDamageCalculator()
 
   const attackCallback = useCallback(
-    (team: Pick<Team, 'level' | 'stats' | 'attack' | 'types'>) =>
-      enemy?.addDamage(damageCalculator(team, enemy)),
+    (attackerLvl: number, attackerStats: Stats, attackerTypes: MonTypes) =>
+      (attackPower: number, attackType: TypeDetailData) =>
+        enemy?.addDamage(
+          damageCalculator(
+            attackerLvl,
+            attackerStats,
+            attackerTypes,
+            attackPower,
+            attackType,
+            enemy
+          )
+        ),
     [enemy, damageCalculator]
   )
 
