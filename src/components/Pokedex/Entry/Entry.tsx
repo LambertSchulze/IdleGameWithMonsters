@@ -1,26 +1,33 @@
 import styles from './Entry.module.css'
 import { type FC } from 'react'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { type DeckEntry, teamMembers } from '../../../store/deckSlice'
-import { useAppSelector } from '../../../store/store'
-import { useMonDetailQuery } from '../../../store/pokemonApi'
+import { toClassName } from '../../../helpers/toClassNames'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import { removeFromTeam, addToTeam, teamMembers } from '../../../store/deckSlice'
+import { useMonDetailQuery, type MonName as MonNameType } from '../../../store/pokemonApi'
 import { MonName } from '../../MonName/MonName'
 import { Image } from '../../Image/Image'
-import { toClassName } from '../../../helpers/toClassNames'
 
-type Props = Partial<DeckEntry>
+type Props = {
+  name: MonNameType
+  spotted: number
+  caught?: number
+}
 
 export const Entry: FC<Props> = ({ name, spotted, caught }) => {
+  const dispatch = useAppDispatch()
   const inTeam = useAppSelector(teamMembers).some(entry => entry.name === name)
-  const { data } = useMonDetailQuery(name ?? skipToken)
+  const { data } = useMonDetailQuery(name)
 
-  const handleClick = () => {}
+  const handleClick = () => {
+    if (inTeam) dispatch(removeFromTeam(name))
+    else dispatch(addToTeam(name))
+  }
 
   return (
     <div
       className={toClassName(
-        caught && styles.caught,
         spotted && styles.spotted,
+        caught && styles.caught,
         inTeam && styles.inTeam
       )}
     >
