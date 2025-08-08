@@ -13,7 +13,7 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
   const [damage, setDamage] = useState(0)
   const [enemyData, setEnemyData] = useState<Enemy | null>(null)
   const { data, isSuccess } = useMonDetailQuery(monName)
-  const isCaught = 'caught' in useAppSelector(store => store.deckState[monName])
+  const deckEntry = useAppSelector(store => store.deckState[monName])
 
   useEffect(() => {
     if (isSuccess) {
@@ -26,10 +26,10 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
         health: Math.max(stats.hp - damage, 0),
         isFainted: damage >= stats.hp,
         addDamage: (attack: number) => setDamage(damage => damage + attack),
-        isCaught
+        isCaught: deckEntry && 'caught' in deckEntry
       })
     }
-  }, [isSuccess, damage, data, level, isCaught])
+  }, [isSuccess, damage, data, level, deckEntry])
 
   useEffect(() => {
     setDamage(0)
