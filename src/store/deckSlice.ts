@@ -97,8 +97,9 @@ export const deckSlice = createSlice({
 type TeamMembersSelector = (state: RootState) => TeamMon[]
 
 export const teamMembers: TeamMembersSelector = createSelector(
-  state => Object.values(state),
-  arr => arr.filter((entry: DeckEntry) => entry.status === 'caught' && entry.inTeam)
+  (state: RootState) => state.deckState,
+  deckState =>
+    Object.values(deckState).filter((entry: DeckEntry) => entry.status === 'caught' && entry.inTeam)
 )
 
 export const { addToDeck, catchMon, levelUp, addToTeam, removeFromTeam } = deckSlice.actions
