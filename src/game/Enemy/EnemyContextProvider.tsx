@@ -13,7 +13,7 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
   const [damage, setDamage] = useState(0)
   const [enemyData, setEnemyData] = useState<Enemy | null>(null)
   const { data, isSuccess } = useMonDetailQuery(monName)
-  const isCaught = Boolean(useAppSelector(store => store.deckState[monName]?.caught))
+  const isCaught = 'caught' in useAppSelector(store => store.deckState[monName])
 
   useEffect(() => {
     if (isSuccess) {
