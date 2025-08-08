@@ -9,7 +9,7 @@ import { Image } from '../../Image/Image'
 
 type Props = {
   name: MonNameType
-  spotted: number
+  spotted?: number
   caught?: number
 }
 
@@ -26,13 +26,14 @@ export const Entry: FC<Props> = ({ name, spotted, caught }) => {
   return (
     <div
       className={toClassName(
+        styles.component,
         spotted && styles.spotted,
         caught && styles.caught,
         inTeam && styles.inTeam
       )}
     >
       <Image front sprites={data?.sprites} />
-      <MonName name={name} smaller />
+      <MonName name={spotted ? name : undefined} smaller />
       {caught && <input type="checkbox" checked={inTeam} onChange={handleClick} />}
     </div>
   )
