@@ -11,7 +11,7 @@ import {
 import { Image } from '../Image/Image'
 import { MonName } from '../MonName/MonName'
 import { LevelBar } from '../LevelBar/LevelBar'
-import { CountdownBar } from '../CountdownBar/CountdownBar'
+import { AttackBar } from '../AttackBar/AttackBar'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { reduceExp } from '../../store/gameSlice'
 import { levelUp } from '../../store/deckSlice'
@@ -38,8 +38,8 @@ export const TeamMember: FC<Props> = ({ name, level, battleState, attackCallback
 
   if (!isSuccess || !leveledMonData) return null
 
-  const handleCountdownComplete = () => {
-    attackCallback(level, leveledMonData.stats, monDetailData.types)
+  const animatedAttackCallback = (power: number, typeData: TypeDetailData) => {
+    attackCallback(level, leveledMonData.stats, monDetailData.types)(power, typeData)
     setAnimate(true)
   }
 
@@ -68,9 +68,9 @@ export const TeamMember: FC<Props> = ({ name, level, battleState, attackCallback
         className={styles.levelBar}
       />
       {battleState === 'BATTLING' && (
-        <CountdownBar
-          durationInMS={Math.max(3000 - leveledMonData.stats.speed * 100, 100)}
-          onComplete={handleCountdownComplete}
+        <AttackBar
+          speedStat={leveledMonData.stats.speed}
+          attackCallback={animatedAttackCallback}
           className={styles.attackBar}
         />
       )}

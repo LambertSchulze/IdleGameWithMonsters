@@ -1,0 +1,9 @@
+.component {
+  width: fit-content;
+
+  text-transform: capitalize;
+}
+
+.countdown {
+  display: block;
+}
