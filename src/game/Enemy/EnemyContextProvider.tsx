@@ -1,7 +1,7 @@
 import { type FC, type PropsWithChildren, useEffect, useState } from 'react'
 import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
 import { type Enemy, EnemyContext } from './EnemyContext'
-import { getStats } from '../Stats/getStats'
+import { getLeveledStats } from '../Stats/getLeveledStats'
 import { useAppSelector } from '../../store/store'
 
 interface Props extends PropsWithChildren {
@@ -17,7 +17,7 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      const stats = getStats(data.baseStats, level)
+      const stats = getLeveledStats(data.baseStats, level)
 
       setEnemyData({
         ...data,
