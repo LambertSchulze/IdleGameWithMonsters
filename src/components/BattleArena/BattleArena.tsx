@@ -11,15 +11,17 @@ export const BattleArena = () => {
 
   return (
     <div className={styles.container}>
-      {team.map(member => (
-        <TeamMember
-          key={member.name}
-          name={member.name}
-          level={member.level}
-          battleState={battleState}
-          attackCallback={attackCallback}
-        />
-      ))}
+      <div>
+        {team.map(member => (
+          <TeamMember
+            key={member.name}
+            name={member.name}
+            level={member.level}
+            battleState={battleState}
+            attackCallback={attackCallback}
+          />
+        ))}
+      </div>
       {enemy && (
         <Enemy
           {...enemy}
