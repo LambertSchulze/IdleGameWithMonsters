@@ -1,17 +1,24 @@
 import style from './MonName.module.css'
 import type { FC } from 'react'
-import type { MonDetailData } from '../../store/pokemonApi'
+import type { MonName as MonNameType } from '../../store/pokemonApi'
 import { toClassName } from '../../helpers/toClassNames'
 
-interface Props extends Pick<MonDetailData, 'name'> {
+interface Props {
+  name?: MonNameType
   smaller?: boolean
-  className: string
+  caught?: boolean
+  className?: string
 }
 
-export const MonName: FC<Partial<Props>> = ({ name, smaller, className }) => {
+export const MonName: FC<Props> = ({ name, smaller, caught, className }) => {
   return (
-    <p className={toClassName(style.component, smaller ? 'smaller' : '', className ?? '')}>
+    <p className={toClassName(style.component, smaller && 'smaller', className)}>
       {name ?? '???'}
+      {caught && (
+        <svg height={'1lh'} width={'1lh'} viewBox="0 0 100 100" className={style.caught}>
+          <circle cx="50" cy="50" r="50"></circle>
+        </svg>
+      )}
     </p>
   )
 }

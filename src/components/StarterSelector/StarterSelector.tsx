@@ -1,9 +1,9 @@
 import styles from './StarterSelector.module.css'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { useMonDetailQuery, type MonName, type MoveName } from '../../store/pokemonApi'
-import { addToDeck, captureMon } from '../../store/deckSlice'
-import { addToTeam } from '../../store/teamSlice'
+import { useMonDetailQuery, type MonName } from '../../store/pokemonApi'
+import { addToDeck, catchMon } from '../../store/deckSlice'
+import { addToTeam } from '../../store/deckSlice'
 import { incrementStageId } from '../../store/gameSlice'
 import { Image } from '../Image/Image'
 import { MonName as MonNameComponent } from '../MonName/MonName'
@@ -34,16 +34,16 @@ const Starter = ({ name }: { name: MonName }) => {
   const { data, isSuccess } = useMonDetailQuery(name)
   const dispatch = useAppDispatch()
 
-  const choose = () => {
+  const chooseHandler = () => {
     if (!isSuccess) return
 
-    dispatch(captureMon(name))
-    dispatch(addToTeam({ name, attack: 'Tackle' as MoveName }))
+    dispatch(catchMon(name))
+    dispatch(addToTeam(name))
     dispatch(incrementStageId())
   }
 
   return (
-    <button onClick={choose} className={styles.button} disabled={!isSuccess}>
+    <button onClick={chooseHandler} className={styles.button} disabled={!isSuccess}>
       <Image front sprites={data?.sprites} className={styles.image} />
       <MonNameComponent name={data?.name} className={styles.name} />
     </button>

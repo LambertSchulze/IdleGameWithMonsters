@@ -23,7 +23,7 @@ export const Pokedex = () => {
       <h2>Pokedex</h2>
       <div className={styles.container}>
         {slicedPokedex.map(entry => (
-          <Entry key={entry.id} {...deck[entry.name]} />
+          <Entry key={entry.id} {...deck[entry.name]} name={entry.name} />
         ))}
       </div>
     </dialog>

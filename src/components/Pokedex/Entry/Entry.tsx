@@ -1,20 +1,40 @@
 import styles from './Entry.module.css'
-import type { FC } from 'react'
-import type { DeckEntry } from '../../../store/deckSlice'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { useMonDetailQuery } from '../../../store/pokemonApi'
+import { type FC } from 'react'
+import { toClassName } from '../../../helpers/toClassNames'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import { removeFromTeam, addToTeam, teamMembers } from '../../../store/deckSlice'
+import { useMonDetailQuery, type MonName as MonNameType } from '../../../store/pokemonApi'
 import { MonName } from '../../MonName/MonName'
 import { Image } from '../../Image/Image'
 
-type Props = Partial<DeckEntry>
+type Props = {
+  name: MonNameType
+  spotted?: number
+  caught?: number
+}
 
 export const Entry: FC<Props> = ({ name, spotted, caught }) => {
-  const { data } = useMonDetailQuery(name ?? skipToken)
+  const dispatch = useAppDispatch()
+  const inTeam = useAppSelector(teamMembers).some(entry => entry.name === name)
+  const { data } = useMonDetailQuery(name)
+
+  const handleClick = () => {
+    if (inTeam) dispatch(removeFromTeam(name))
+    else dispatch(addToTeam(name))
+  }
 
   return (
-    <div className={styles[caught ? 'caught' : spotted ? 'spotted' : 'unknown']}>
-      <Image front sprites={data?.sprites} className={styles.img} />
-      <MonName name={name} smaller />
+    <div
+      className={toClassName(
+        styles.component,
+        spotted && styles.spotted,
+        caught && styles.caught,
+        inTeam && styles.inTeam
+      )}
+    >
+      <Image front sprites={data?.sprites} />
+      <MonName name={spotted ? name : undefined} smaller />
+      {caught && <input type="checkbox" checked={inTeam} onChange={handleClick} />}
     </div>
   )
 }

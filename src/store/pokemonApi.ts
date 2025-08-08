@@ -73,14 +73,16 @@ export interface Stats {
   speed: number
 }
 
+export interface MonTypes {
+  1: TypeName
+  2: TypeName | null
+}
+
 export interface MonDetailData {
   name: MonName
   baseExp: number
   baseStats: Stats
-  types: {
-    1: TypeName
-    2: TypeName | null
-  }
+  types: MonTypes
   moves: {
     name: MoveName
     learnedAt: number

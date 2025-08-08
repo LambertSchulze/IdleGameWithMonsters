@@ -1,6 +1,7 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'Team Enemy';
   column-gap: 2ch;
 
   padding: 2ch;

@@ -6,3 +6,11 @@
     font-family: 'Press Start 2P';
   }
 }
+
+.caught {
+  margin-inline-start: 0.5ch;
+
+  circle {
+    fill: red;
+  }
+}

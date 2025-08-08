@@ -1,6 +1,6 @@
 import type { Stats } from '../../store/pokemonApi'
 
-export const getStats = (baseStats: Stats, level: number): Stats => {
+export const getLeveledStats = (baseStats: Stats, level: number): Stats => {
   const statCalculation = (baseStat: number) => Math.floor((baseStat * 2 * level) / 100) + 5
   const hpCalculation = (baseHp: number) => Math.floor((baseHp * 2 * level) / 100) + level + 10
 

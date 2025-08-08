@@ -17,7 +17,7 @@ export const Image: FC<Partial<Props>> = ({ sprites, front, back, className, onA
       alt=""
       width={96}
       height={96}
-      className={toClassName(style.component, className ?? '')}
+      className={toClassName(style.component, className)}
       onAnimationEnd={onAnimationEnd}
     />
   )
