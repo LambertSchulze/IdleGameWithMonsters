@@ -1,9 +1,9 @@
 import styles from './BattleArena.module.css'
+import { useAppSelector } from '../../store/store'
+import { teamMembers } from '../../store/deckSlice'
 import { useBattle } from '../../game/Battle/useBattle'
 import { TeamMember } from '../TeamMember/TeamMember'
 import { Enemy } from '../Enemy/Enemy'
-import { useAppSelector } from '../../store/store'
-import { teamMembers } from '../../store/deckSlice'
 
 export const BattleArena = () => {
   const { enemy, battleState, attackCallback, caught, isCatchable, catchCallback } = useBattle()
