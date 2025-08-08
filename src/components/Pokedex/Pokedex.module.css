@@ -1,10 +1,15 @@
-.component::backdrop {
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(1px);
+.component {
+  width: 95vw;
+  max-height: 95vh;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(1px);
+  }
 }
 
 .container {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(auto-fit, 120px);
   grid-gap: 1ch;
 }

@@ -13,7 +13,7 @@ export const Entry: FC<Props> = ({ name, spotted, caught }) => {
 
   return (
     <div className={styles[caught ? 'caught' : spotted ? 'spotted' : 'unknown']}>
-      <Image front sprites={data?.sprites} />
+      <Image front sprites={data?.sprites} className={styles.img} />
       <MonName name={name} smaller />
     </div>
   )

@@ -9,3 +9,7 @@
     filter: grayscale(1);
   }
 }
+
+.img {
+  margin-inline: auto;
+}
