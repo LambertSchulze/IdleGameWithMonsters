@@ -10,7 +10,7 @@ interface Props {
 
 export const HealthBar: FC<Props> = ({ health, maxHp, className }) => {
   return (
-    <div className={toClassName(styles.component, className ?? '')}>
+    <div className={toClassName(styles.component, className)}>
       {health}{' '}
       <meter
         id={`health_bar`}

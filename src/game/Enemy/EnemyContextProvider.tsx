@@ -10,7 +10,6 @@ interface Props extends PropsWithChildren {
 }
 
 export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
-  const [damage, setDamage] = useState(0)
   const [enemyData, setEnemyData] = useState<Enemy | null>(null)
   const { data, isSuccess } = useMonDetailQuery(monName)
   const deckEntry = useAppSelector(store => store.deckState[monName])
@@ -23,17 +22,10 @@ export const EnemyProvider: FC<Props> = ({ monName, level, children }) => {
         ...data,
         level,
         stats,
-        health: Math.max(stats.hp - damage, 0),
-        isFainted: damage >= stats.hp,
-        addDamage: (attack: number) => setDamage(damage => damage + attack),
         isCaught: deckEntry && 'caught' in deckEntry
       })
     }
-  }, [isSuccess, damage, data, level, deckEntry])
-
-  useEffect(() => {
-    setDamage(0)
-  }, [monName])
+  }, [isSuccess, data, level, deckEntry])
 
   return <EnemyContext.Provider value={enemyData}>{children}</EnemyContext.Provider>
 }

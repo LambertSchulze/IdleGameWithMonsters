@@ -1,36 +1,25 @@
 import styles from './BattleArena.module.css'
 import { useAppSelector } from '../../store/store'
 import { teamMembers } from '../../store/deckSlice'
-import { useBattle } from '../../game/Battle/useBattle'
 import { TeamMember } from '../TeamMember/TeamMember'
 import { Enemy } from '../Enemy/Enemy'
+import { useEnemy } from '../../game/Enemy/useEnemy'
+import { BattleProvider } from '../../game/Battle/BattleContextProvider'
 
 export const BattleArena = () => {
-  const { enemy, battleState, attackCallback, caught, isCatchable, catchCallback } = useBattle()
+  const enemy = useEnemy()
   const team = useAppSelector(teamMembers)
 
   return (
-    <div className={styles.container}>
-      <div>
-        {team.map(member => (
-          <TeamMember
-            key={member.name}
-            name={member.name}
-            level={member.level}
-            battleState={battleState}
-            attackCallback={attackCallback}
-          />
-        ))}
+    <BattleProvider>
+      <div className={styles.container}>
+        <div>
+          {team.map(member => (
+            <TeamMember key={member.name} name={member.name} level={member.level} />
+          ))}
+        </div>
+        {enemy && <Enemy {...enemy} />}
       </div>
-      {enemy && (
-        <Enemy
-          {...enemy}
-          battleState={battleState}
-          caught={caught}
-          isCatchable={isCatchable}
-          catchCallback={catchCallback}
-        />
-      )}
-    </div>
+    </BattleProvider>
   )
 }
